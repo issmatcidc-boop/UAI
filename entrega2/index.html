@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Festival Blaster 8-Bit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    :root { --arcade-font: 'Press Start 2P', monospace; --ink:#080b22; --cyan:#52f8ff; --pink:#ff4e9a; --gold:#ffe16a; }
+    * { box-sizing:border-box; margin:0; padding:0; user-select:none; }
+    body {
+      min-height:100vh; padding:18px; display:grid; place-items:center; color:#fff;
+      font-family:var(--arcade-font); background:#070719;
+      background-image: radial-gradient(#263368 1px, transparent 1px), linear-gradient(180deg,#171246,#060619 72%);
+      background-size:18px 18px, 100% 100%;
+    }
+    .main-container { width:min(1500px,100%); display:flex; flex-direction:column; align-items:center; gap:18px; }
+    .cabinet-label { color:var(--gold); font-size:clamp(11px,1.4vw,17px); letter-spacing:2px; text-align:center; text-shadow:3px 3px 0 #b42c72, 0 0 12px #ff3eae; }
+    .game-wrapper {
+      position:relative; width:100%; height:65vh; min-height:470px; max-height:680px; overflow:hidden;
+      border:8px solid #172050; outline:4px solid #61eefa; outline-offset:-12px;
+      border-radius:18px; background:#080b22;
+      box-shadow:0 0 0 8px #e42c80, 0 0 0 13px #311345, 0 0 38px #e42c80, inset 0 0 50px #000;
+    }
+    .sky-bg { position:absolute; inset:0; z-index:0; opacity:.38; background:url('fondo.jpg') center/cover no-repeat; filter:contrast(1.16) saturate(.86); }
+    .sky-bg::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(17,16,69,.22),rgba(1,5,21,.74)); }
+    .scanlines { position:absolute; z-index:9; inset:0; pointer-events:none; background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 2px,transparent 2px 5px); mix-blend-mode:multiply; }
+    .scanlines::after { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at center, transparent 45%,rgba(0,0,0,.48) 100%); }
+    #fireworks-canvas, #game-canvas { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+    #fireworks-canvas { z-index:2; } #game-canvas { z-index:5; image-rendering:pixelated; }
+    .hud-overlay { position:absolute; top:23px; left:28px; right:28px; z-index:10; display:flex; justify-content:space-between; pointer-events:none; }
+    .score-badge { padding:13px 15px; border:3px solid var(--cyan); background:#080d2b; color:var(--cyan); font-size:clamp(10px,1.25vw,16px); line-height:1.55; box-shadow:4px 4px 0 #0f2154,0 0 15px #31dfea; text-shadow:2px 2px #114570; }
+    .score-badge span { color:var(--gold); }
+    .pause-btn { pointer-events:auto; padding:10px 13px; border:3px solid #ff86bd; background:#27113b; color:#fff; font:inherit; font-size:clamp(8px,.9vw,11px); line-height:1.5; cursor:pointer; box-shadow:3px 3px 0 #090817; }
+    .pause-btn:hover:not(:disabled) { background:#793064; box-shadow:0 0 14px #ff4e9a; }
+    .pause-btn:disabled { opacity:.45; cursor:not-allowed; }
+    .status-banner { position:absolute; z-index:12; top:50%; left:50%; width:min(720px,88%); transform:translate(-50%,-50%); padding:30px 34px; text-align:center; background:#101441; border:5px solid var(--gold); box-shadow:0 0 0 5px #e43d87,0 0 0 10px #111a50,12px 12px 0 rgba(0,0,0,.6),0 0 28px #ff4c9b; }
+    .status-banner h2 { color:var(--gold); font-size:clamp(16px,2vw,28px); line-height:1.55; margin-bottom:17px; text-shadow:3px 3px #bf2e75; }
+    .status-banner p { color:#e7f9ff; font-size:clamp(10px,1.15vw,15px); line-height:1.85; margin-bottom:25px; }
+    .rules-box { margin:0 auto 23px; max-width:560px; padding:15px 18px; border:2px dashed #54eafa; background:rgba(3,8,35,.66); color:#efffff; font-size:clamp(8px,.86vw,11px); line-height:2; text-align:left; }
+    .rules-box b { color:var(--gold); }
+    .pixel-cats { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+    .pixel-cat { position:absolute; width:82px; height:72px; filter:drop-shadow(4px 4px 0 #080816) drop-shadow(0 0 7px #ff67bc); }
+    .pixel-cat.left { left:-22px; bottom:8px; } .pixel-cat.right { right:-22px; top:8px; transform:scaleX(-1); }
+    .start-btn { padding:16px 20px; border:3px solid #fff2a1; font:inherit; font-size:clamp(10px,1.1vw,15px); line-height:1.6; color:#071027; background:var(--gold); cursor:pointer; box-shadow:4px 4px 0 #b92c71; transition:transform .12s,box-shadow .12s; }
+    .start-btn:hover { transform:translate(-2px,-2px); box-shadow:7px 7px 0 #b92c71,0 0 16px #fff08c; }
+    .start-btn:active { transform:translate(3px,3px); box-shadow:1px 1px 0 #b92c71; }
+    .controls-panel { width:100%; display:grid; grid-template-columns:repeat(4,1fr); gap:12px; padding:14px; background:#101337; border:4px solid #28336f; box-shadow:0 7px 0 #07091b; }
+    .option-btn { min-height:105px; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:10px; padding:12px 8px; border:4px solid #33417a; background:#161b4a; color:white; font:inherit; font-size:clamp(8px,1vw,13px); line-height:1.6; cursor:pointer; box-shadow:4px 4px 0 #060817; transition:transform .12s, filter .12s; }
+    .option-btn .btn-icon { font-size:30px; image-rendering:pixelated; }
+    .option-btn:not(:disabled):hover { transform:translate(-3px,-3px); filter:brightness(1.25); box-shadow:7px 7px 0 #060817; }
+    .option-btn:disabled { opacity:.48; cursor:not-allowed; filter:grayscale(.45); }
+    #btn-septiembre { border-color:#ef5064; } #btn-navidad { border-color:#46d278; } #btn-halloween { border-color:#f29b3a; } #btn-anonuevo { border-color:#d46af5; }
+    .hidden { display:none!important; }
+    @media(max-width:690px) { body{padding:10px}.game-wrapper{min-height:430px;border-width:6px}.controls-panel{grid-template-columns:repeat(2,1fr);gap:8px}.option-btn{min-height:78px}.hud-overlay{left:18px;right:18px;top:18px}.status-banner{padding:24px 18px} }
+  </style>
+</head>
+<body>
+  <main class="main-container">
+    <div class="cabinet-label">★ FESTIVAL BLASTER ★ INSERTA TU MEMORIA</div>
+    <section id="game-wrapper" class="game-wrapper">
+      <div class="sky-bg"></div><canvas id="fireworks-canvas"></canvas><canvas id="game-canvas"></canvas><div class="scanlines"></div>
+      <div class="hud-overlay"><div class="score-badge">SCORE <span id="score-val">0</span> / 10</div><button id="pause-btn" class="pause-btn" disabled>Ⅱ PAUSA</button><div class="score-badge">1UP · FESTIVAL</div></div>
+      <div id="status-banner" class="status-banner">
+        <div class="pixel-cats" aria-hidden="true">
+          <svg class="pixel-cat left" viewBox="0 0 82 72"><rect x="22" y="15" width="38" height="38" fill="#17142c"/><rect x="18" y="10" width="13" height="14" fill="#17142c"/><rect x="52" y="10" width="13" height="14" fill="#17142c"/><rect x="27" y="25" width="9" height="8" fill="#57f7f7"/><rect x="47" y="25" width="9" height="8" fill="#57f7f7"/><rect x="37" y="35" width="8" height="6" fill="#ff92c8"/><rect x="25" y="48" width="12" height="14" fill="#59468d"/><rect x="46" y="48" width="12" height="14" fill="#59468d"/><rect x="10" y="36" width="14" height="8" fill="#17142c"/><rect x="58" y="40" width="17" height="7" fill="#17142c"/><rect x="72" y="33" width="7" height="12" fill="#17142c"/></svg>
+          <svg class="pixel-cat right" viewBox="0 0 82 72"><rect x="22" y="15" width="38" height="38" fill="#17142c"/><rect x="18" y="10" width="13" height="14" fill="#17142c"/><rect x="52" y="10" width="13" height="14" fill="#17142c"/><rect x="27" y="25" width="9" height="8" fill="#57f7f7"/><rect x="47" y="25" width="9" height="8" fill="#57f7f7"/><rect x="37" y="35" width="8" height="6" fill="#ff92c8"/><rect x="25" y="48" width="12" height="14" fill="#59468d"/><rect x="46" y="48" width="12" height="14" fill="#59468d"/><rect x="10" y="36" width="14" height="8" fill="#17142c"/><rect x="58" y="40" width="17" height="7" fill="#17142c"/><rect x="72" y="33" width="7" height="12" fill="#17142c"/></svg>
+        </div>
+        <h2 id="banner-title">¡MEMORIA MUSICAL!</h2><p id="banner-msg">PON A PRUEBA TU OÍDO FESTIVO.</p><div id="rules-box" class="rules-box"><b>REGLAS DEL JUEGO</b><br>1. Escucha la melodía del objeto que avanza.<br>2. Pulsa la festividad correcta antes de que te alcance.<br>3. Consigue <b>10 PUNTOS</b> para ganar. Un error termina la partida.</div><button id="start-btn" class="start-btn">▶ COMENZAR</button>
+      </div>
+    </section>
+    <section class="controls-panel" aria-label="Opciones de festividad">
+      <button id="btn-septiembre" class="option-btn" disabled><span class="btn-icon">🇨🇱</span><span>18 DE<br>SEPTIEMBRE</span></button>
+      <button id="btn-navidad" class="option-btn" disabled><span class="btn-icon">🎄</span><span>NAVIDAD</span></button>
+      <button id="btn-halloween" class="option-btn" disabled><span class="btn-icon">🎃</span><span>HALLOWEEN</span></button>
+      <button id="btn-anonuevo" class="option-btn" disabled><span class="btn-icon">🎆</span><span>AÑO NUEVO</span></button>
+    </section>
+  </main>
+  <script>
+    const wrapper=document.getElementById('game-wrapper'),fwCanvas=document.getElementById('fireworks-canvas'),fwCtx=fwCanvas.getContext('2d'),canvas=document.getElementById('game-canvas'),ctx=canvas.getContext('2d');
+    let GROUND_Y=0, bgFireworks=[], score=0,isPlaying=false,isPaused=false,pendingNextChallenge=false,currentTheme=null,lastTheme=null,isWaitingForAnswer=false,activeAudio=null,animFrameId=null,gameTime=0;
+    const player={x:130,y:0,width:58,height:76,isShooting:false,shootTimer:0};
+    const obstacle={x:1200,y:0,width:62,height:62,speed:4.2,active:false,theme:null};
+    const laserBeam={active:false,timer:0};
+    const AUDIO_MAP={septiembre:new Audio('LaConsentida.wav'),navidad:new Audio('ItsTime.wav'),halloween:new Audio('ThisIsHalloween.wav'),anonuevo:new Audio('AnoNuevo.wav')};
+    const scoreValEl=document.getElementById('score-val'),statusBanner=document.getElementById('status-banner'),bannerTitle=document.getElementById('banner-title'),bannerMsg=document.getElementById('banner-msg'),rulesBox=document.getElementById('rules-box'),startBtn=document.getElementById('start-btn'),pauseBtn=document.getElementById('pause-btn');
+    const optionBtns={septiembre:document.getElementById('btn-septiembre'),navidad:document.getElementById('btn-navidad'),halloween:document.getElementById('btn-halloween'),anonuevo:document.getElementById('btn-anonuevo')};
+    function resizeCanvases(){const r=wrapper.getBoundingClientRect();fwCanvas.width=canvas.width=r.width;fwCanvas.height=canvas.height=r.height;GROUND_Y=canvas.height-38;player.y=GROUND_Y;obstacle.y=GROUND_Y-obstacle.height;}
+    function setButtonsEnabled(enabled){Object.values(optionBtns).forEach(b=>b.disabled=!enabled)}
+    function stopAllAudio(){Object.values(AUDIO_MAP).forEach(a=>{a.pause();a.currentTime=0})}
+    Object.entries(optionBtns).forEach(([key,b])=>b.addEventListener('click',()=>handleAnswer(key))); startBtn.addEventListener('click',()=>isPaused?resumeGame():startGame());pauseBtn.addEventListener('click',pauseGame);window.addEventListener('resize',resizeCanvases);
+    function startGame(){resizeCanvases();score=0;scoreValEl.textContent=score;isPlaying=true;isPaused=false;pendingNextChallenge=false;pauseBtn.disabled=false;pauseBtn.textContent='Ⅱ PAUSA';rulesBox.classList.add('hidden');statusBanner.classList.add('hidden');stopAllAudio();resetObstacle();spawnNextChallenge();if(animFrameId)cancelAnimationFrame(animFrameId);loop()}
+    function pauseGame(){if(!isPlaying||isPaused)return;isPaused=true;setButtonsEnabled(false);if(activeAudio)activeAudio.pause();bannerTitle.textContent='Ⅱ PAUSA';bannerMsg.textContent='LA PARTIDA Y LA MÚSICA ESTÁN EN PAUSA.';rulesBox.classList.add('hidden');startBtn.textContent='▶ CONTINUAR';pauseBtn.textContent='▶ CONTINUAR';statusBanner.classList.remove('hidden')}
+    function resumeGame(){if(!isPlaying||!isPaused)return;isPaused=false;statusBanner.classList.add('hidden');pauseBtn.textContent='Ⅱ PAUSA';if(pendingNextChallenge){pendingNextChallenge=false;spawnNextChallenge();return}if(activeAudio)activeAudio.play().catch(e=>console.log('Audio block:',e));setButtonsEnabled(isWaitingForAnswer)}
+    function spawnNextChallenge(){const themes=['septiembre','navidad','halloween','anonuevo'];const available=themes.filter(t=>t!==lastTheme);currentTheme=available[Math.floor(Math.random()*available.length)];lastTheme=currentTheme;obstacle.x=canvas.width+20;obstacle.active=true;obstacle.theme=currentTheme;isWaitingForAnswer=true;stopAllAudio();activeAudio=AUDIO_MAP[currentTheme];if(activeAudio)activeAudio.play().catch(e=>console.log('Audio block:',e));setButtonsEnabled(true)}
+    function resetObstacle(){obstacle.active=false;obstacle.x=canvas.width+20;isWaitingForAnswer=false}
+    function handleAnswer(selectedTheme){if(!isWaitingForAnswer||!isPlaying||isPaused)return;setButtonsEnabled(false);if(selectedTheme===currentTheme){score++;scoreValEl.textContent=score;stopAllAudio();player.isShooting=true;player.shootTimer=18;laserBeam.active=true;laserBeam.timer=14;if(typeof confetti==='function')confetti({particleCount:60,spread:80,origin:{x:(obstacle.x+25)/window.innerWidth,y:(GROUND_Y-25)/window.innerHeight}});obstacle.active=false;if(score>=10)triggerWin();else {pendingNextChallenge=true;setTimeout(()=>{if(isPlaying&&!isPaused&&pendingNextChallenge){pendingNextChallenge=false;spawnNextChallenge()}},1100)}}else gameOver('¡RESPUESTA INCORRECTA!','Esa no era la celebración correspondiente al sonido.')}
+    function gameOver(title,msg){isPlaying=false;isPaused=false;isWaitingForAnswer=false;pauseBtn.disabled=true;stopAllAudio();setButtonsEnabled(false);bannerTitle.textContent=title;bannerMsg.textContent=msg;rulesBox.classList.add('hidden');startBtn.textContent='↻ INTENTAR DE NUEVO';statusBanner.classList.remove('hidden')}
+    function triggerWin(){isPlaying=false;isPaused=false;isWaitingForAnswer=false;pauseBtn.disabled=true;stopAllAudio();setButtonsEnabled(false);if(typeof confetti==='function')confetti({particleCount:220,spread:120,origin:{y:.5}});bannerTitle.textContent='¡VICTORIA ABSOLUTA!';bannerMsg.textContent='¡Has reconocido todas las canciones festivas y alcanzado los 10 puntos!';rulesBox.classList.add('hidden');startBtn.textContent='▶ JUGAR OTRA VEZ';statusBanner.classList.remove('hidden')}
+    function px(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h))}
+    function drawPlayer(x,y){const bob=player.isShooting?0:Math.round(Math.sin(gameTime)*2), yy=y+bob;ctx.save();ctx.shadowColor='#46f6ff';ctx.shadowBlur=10;
+      // Botas, piernas, cuerpo y casco: sprite de explorador arcade, construido a bloques.
+      px(x+7,yy-9,17,9,'#101528');px(x+37,yy-9,16,9,'#101528');px(x+12,yy-27,12,20,'#4c6ee6');px(x+35,yy-27,12,20,'#4c6ee6');
+      px(x+10,yy-56,40,31,'#111a3d');px(x+14,yy-53,32,25,'#2d58bb');px(x+18,yy-49,24,9,'#70f6ff');px(x+23,yy-38,16,10,'#f4c580');
+      px(x+11,yy-71,39,18,'#101528');px(x+15,yy-74,31,7,'#55e9ff');px(x+20,yy-64,22,9,'#274aa8');px(x+28,yy-61,8,5,'#f7f7d3');
+      if(player.isShooting){px(x+48,yy-49,15,10,'#101528');px(x+54,yy-46,14,5,'#f7f7d3')}else{px(x+1,yy-48,13,9,'#101528');px(x+47,yy-45,13,9,'#101528')}ctx.restore();}
+    function drawObstacle(o){const x=Math.round(o.x),y=Math.round(o.y);ctx.save();ctx.shadowColor='#ffdd5b';ctx.shadowBlur=14; if(o.theme==='septiembre'){ // emboque
+        px(x+10,y+3,43,9,'#8d4a25');px(x+5,y+10,54,13,'#e8c286');px(x+10,y+23,44,31,'#ca7330');px(x+17,y+28,30,25,'#f3bb56');px(x+25,y+0,8,16,'#fff1b5');px(x+28,y+3,3,7,'#e84443');
+      }else if(o.theme==='navidad'){ // regalo
+        px(x+5,y+14,52,43,'#c9264e');px(x+9,y+19,44,34,'#ec4b65');px(x+26,y+14,10,43,'#ffe56d');px(x+5,y+29,52,9,'#ffe56d');px(x+15,y+5,17,13,'#ffe56d');px(x+31,y+5,17,13,'#ffe56d');
+      }else if(o.theme==='halloween'){ // jack-o-lantern
+        px(x+26,y+1,10,12,'#4f9f4c');px(x+12,y+12,38,7,'#e78220');px(x+6,y+19,50,30,'#f18b22');px(x+12,y+48,38,8,'#bd581b');px(x+15,y+27,10,8,'#231332');px(x+39,y+27,10,8,'#231332');px(x+22,y+39,19,7,'#231332');px(x+28,y+39,8,3,'#ffe56d');
+      }else{ // copa de champagne y destello
+        px(x+27,y+3,8,10,'#fff3a5');px(x+18,y+13,26,20,'#fff3a5');px(x+21,y+16,20,14,'#d6b94b');px(x+28,y+33,7,17,'#f7f7d3');px(x+19,y+50,25,7,'#f7f7d3');px(x+5,y+6,6,6,'#ff6de2');px(x+50,y+7,7,7,'#65f7ff'); }
+      ctx.restore();}
+    function drawLaser(px0,py0){ctx.save();ctx.lineCap='square';ctx.strokeStyle='#fd52bd';ctx.lineWidth=11;ctx.beginPath();ctx.moveTo(px0+57,py0-44);ctx.lineTo(obstacle.x+31,obstacle.y+31);ctx.stroke();ctx.strokeStyle='#fff6a2';ctx.lineWidth=4;ctx.shadowColor='#54f8ff';ctx.shadowBlur=16;ctx.beginPath();ctx.moveTo(px0+57,py0-44);ctx.lineTo(obstacle.x+31,obstacle.y+31);ctx.stroke();ctx.restore();}
+    function drawStarfield(){ctx.save();for(let i=0;i<28;i++){const x=(i*83+Math.floor(gameTime*9))%canvas.width,y=72+(i*47)%(canvas.height*.55);px(x,y,2,2,i%3?'#7284d9':'#f8e67f')}ctx.restore()}
+    function updateAndDraw(){ctx.clearRect(0,0,canvas.width,canvas.height);gameTime+=.18;drawStarfield();px(0,GROUND_Y,canvas.width,4,'#57efff');px(0,GROUND_Y+4,canvas.width,canvas.height-GROUND_Y,'#111944');if(obstacle.active){obstacle.x-=obstacle.speed;drawObstacle(obstacle);if(obstacle.x<=player.x+player.width)gameOver('¡TIEMPO AGOTADO!','El objeto festivo te alcanzó antes de responder.')}drawPlayer(player.x,player.y);if(laserBeam.active){drawLaser(player.x,player.y);if(--laserBeam.timer<=0)laserBeam.active=false}if(player.isShooting&&--player.shootTimer<=0)player.isShooting=false}
+    function createBgFirework(){const colors=['#ffe16a','#ff4e9a','#52f8ff','#5df587'];const x=Math.random()*fwCanvas.width,y=Math.random()*fwCanvas.height*.43,color=colors[Math.floor(Math.random()*colors.length)],particles=[];for(let i=0;i<20;i++){const a=Math.PI*2/20*i,s=1.4+Math.random()*2.8;particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,alpha:1,color})}bgFireworks.push(particles)}
+    function updateBgFireworks(){fwCtx.clearRect(0,0,fwCanvas.width,fwCanvas.height);if(Math.random()<.035)createBgFirework();for(let i=bgFireworks.length-1;i>=0;i--){let dead=true;for(const p of bgFireworks[i]){p.x+=p.vx;p.y+=p.vy;p.alpha-=.016;if(p.alpha>0){dead=false;fwCtx.globalAlpha=p.alpha;fwCtx.fillStyle=p.color;fwCtx.fillRect(p.x,p.y,3,3)}}fwCtx.globalAlpha=1;if(dead)bgFireworks.splice(i,1)}}
+    function loop(){if(!isPaused)updateBgFireworks();if(isPlaying&&!isPaused)updateAndDraw();animFrameId=requestAnimationFrame(loop)} resizeCanvases();loop();
+  </script>
+</body>
+</html>

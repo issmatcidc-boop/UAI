@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrega 3 - Sintetizador Max/MSP</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #121212; color: #ffffff; margin: 0; padding: 40px; line-height: 1.6; }
+        .container { max-width: 900px; margin: auto; }
+        h1, h2, h3 { color: #00d26a; }
+        .back-btn { display: inline-block; margin-bottom: 20px; color: #00d26a; text-decoration: none; font-weight: bold; }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin: 20px 0; border-radius: 8px; border: 1px solid #333; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        img { width: 100%; height: auto; border-radius: 8px; margin: 15px 0; border: 1px solid #333; }
+        ul { background: #1f1f1f; padding: 20px 40px; border-radius: 8px; list-style-type: square; }
+        li { margin-bottom: 10px; }
+        code { background: #2a2a2a; padding: 2px 6px; border-radius: 4px; color: #00d26a; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back-btn" href="../">← Volver al Portafolio</a>
+        <h1>Entrega N° 3: Síntesis y Control Sonoro en Max/MSP</h1>
+        
+        <h2>1. Demostración de la Interfaz en Vivo</h2>
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/aNAfISuBsWk" allowfullscreen></iframe>
+        </div>
+
+        <h2>2. Ficha Técnica y Guía de Controles</h2>
+        <p>Esta aplicación desarrollada en Max/MSP combina módulos de síntesis de audio, procesamiento en tiempo real e interacción MIDI mediante controles visuales:</p>
+        <ul>
+            <li><strong>Bangs (Disparadores):</strong> Envían impulsos instantáneos para activar eventos sonoros, notas solas o reinicios de parámetros.</li>
+            <li><strong>Sliders / Faders (Deslizadores):</strong> Ofrecen modulación continua sobre envolventes ADSR, frecuencias de corte de filtros y volúmenes principales.</li>
+            <li><strong>Toggles (Conmutadores):</strong> Encienden o apagan módulos de síntesis, efectos en cadena (reverb, delay) o activadores de bucles.</li>
+        </ul>
+
+        <h2>3. Registro Visual (Modo Presentación vs. Modo Edición)</h2>
+        
+        <h3>Modo Presentación (Interfaz de Usuario)</h3>
+        <p>Vista limpia diseñada exclusivamente para la interpretación e interacción del usuario.</p>
+        <img src="modo_presentacion.png" alt="Modo Presentación Max/MSP">
+
+        <h3>Modo Edición (Programación Visual y Conexiones)</h3>
+        <p>Estructura modular interna del parche mostrando el flujo de señal digital de audio (MSP) y control (Max).</p>
+        <img src="modo_edicion.png" alt="Modo Edición Max/MSP">
+
+        <h2>4. Archivos de Proyecto</h2>
+        <p>El archivo editable <code>.maxpat</code> y las muestras de audio asociadas se encuentran disponibles para su descarga o inspección en la raíz del repositorio de GitHub.</p>
+    </div>
+</body>
+</html>
