@@ -3,50 +3,258 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Entrega 3 - Sintetizador Max/MSP</title>
+    <title>STAGE 3: MAX/MSP SYNTH | Arcade Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; background-color: #121212; color: #ffffff; margin: 0; padding: 40px; line-height: 1.6; }
-        .container { max-width: 900px; margin: auto; }
-        h1, h2, h3 { color: #00d26a; }
-        .back-btn { display: inline-block; margin-bottom: 20px; color: #00d26a; text-decoration: none; font-weight: bold; }
-        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin: 20px 0; border-radius: 8px; border: 1px solid #333; }
-        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-        img { width: 100%; height: auto; border-radius: 8px; margin: 15px 0; border: 1px solid #333; }
-        ul { background: #1f1f1f; padding: 20px 40px; border-radius: 8px; list-style-type: square; }
-        li { margin-bottom: 10px; }
-        code { background: #2a2a2a; padding: 2px 6px; border-radius: 4px; color: #00d26a; }
+        :root {
+            --arcade-green: #00ff66;
+            --ghost-cyan: #00f0ff;
+            --neon-pink: #ff0055;
+            --dark-bg: #05000a;
+            --text-main: #f3f4f6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--dark-bg);
+            background-image: 
+                radial-gradient(circle at 50% 20%, rgba(0, 255, 102, 0.15) 0%, transparent 60%),
+                linear-gradient(rgba(0, 240, 255, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.08) 1px, transparent 1px);
+            background-size: 100% 100%, 35px 35px, 35px 35px;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Líneas CRT sutiles */
+        body::after {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%);
+            background-size: 100% 4px;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.65rem;
+            color: var(--ghost-cyan);
+            text-decoration: none;
+            background: rgba(5, 0, 10, 0.95);
+            padding: 12px 18px;
+            border-radius: 6px;
+            border: 2px solid var(--ghost-cyan);
+            box-shadow: 3px 3px 0px var(--neon-pink);
+            z-index: 100;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--ghost-cyan);
+            color: #000;
+            box-shadow: 3px 3px 0px #fff;
+        }
+
+        .cabinet {
+            max-width: 880px;
+            width: 100%;
+            background: rgba(8, 2, 16, 0.95);
+            border: 4px solid var(--arcade-green);
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 0 30px var(--arcade-green), inset 0 0 20px var(--arcade-green);
+            position: relative;
+            z-index: 1;
+            margin-top: 30px;
+        }
+
+        .arcade-header {
+            font-family: 'Press Start 2P', monospace;
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .arcade-header h1 {
+            color: var(--arcade-green);
+            font-size: 1.4rem;
+            text-shadow: 3px 3px #000, 0 0 12px var(--arcade-green);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .arcade-header .stage-tag {
+            color: var(--ghost-cyan);
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+        }
+
+        /* CARDS CONTENEDORAS CON ALTA LEGIBILIDAD */
+        .arcade-card {
+            background: rgba(3, 0, 7, 0.95);
+            border: 2px solid var(--ghost-cyan);
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 30px;
+            box-shadow: 4px 4px 0px var(--neon-pink);
+        }
+
+        .arcade-card h2 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.9rem;
+            color: var(--ghost-cyan);
+            margin-bottom: 18px;
+            text-shadow: 2px 2px #000;
+            line-height: 1.4;
+        }
+
+        .arcade-card h3 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.75rem;
+            color: var(--arcade-green);
+            margin: 20px 0 10px 0;
+        }
+
+        .arcade-card p {
+            font-size: 0.95rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+
+        /* MARCO DE VIDEO DE YOUTUBE */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 3px solid var(--arcade-green);
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.3);
+            background: #000;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* IMÁGENES CON MARCO RETRO */
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 15px 0 25px 0;
+            border: 2px solid var(--ghost-cyan);
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.2);
+        }
+
+        ul {
+            background: #000000;
+            padding: 20px 30px;
+            border-radius: 8px;
+            border-left: 4px solid var(--arcade-green);
+            list-style-type: square;
+            margin-top: 15px;
+        }
+
+        li {
+            margin-bottom: 10px;
+            color: #f1f5f9;
+            font-size: 0.92rem;
+            line-height: 1.5;
+        }
+
+        li strong {
+            color: var(--arcade-green);
+        }
+
+        code {
+            background: #18052e;
+            padding: 3px 8px;
+            border-radius: 4px;
+            color: var(--ghost-cyan);
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.65rem;
+            border: 1px solid var(--ghost-cyan);
+        }
     </style>
 </head>
+
 <body>
-    <div class="container">
-        <a class="back-btn" href="../">← Volver al Portafolio</a>
-        <h1>Entrega N° 3: Síntesis y Control Sonoro en Max/MSP</h1>
-        
-        <h2>1. Demostración de la Interfaz en Vivo</h2>
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/aNAfISuBsWk" allowfullscreen></iframe>
+
+    <a class="back-btn" href="../">◄ BACK TO ARCADE</a>
+
+    <div class="cabinet">
+        <div class="arcade-header">
+            <h1>STAGE 3: MAX / MSP SOUND SYNTH</h1>
+            <div class="stage-tag">--- SYSTEM TYPE: REAL-TIME AUDIO DSP ---</div>
         </div>
 
-        <h2>2. Ficha Técnica y Guía de Controles</h2>
-        <p>Esta aplicación desarrollada en Max/MSP combina módulos de síntesis de audio, procesamiento en tiempo real e interacción MIDI mediante controles visuales:</p>
-        <ul>
-            <li><strong>Bangs (Disparadores):</strong> Envían impulsos instantáneos para activar eventos sonoros, notas solas o reinicios de parámetros.</li>
-            <li><strong>Sliders / Faders (Deslizadores):</strong> Ofrecen modulación continua sobre envolventes ADSR, frecuencias de corte de filtros y volúmenes principales.</li>
-            <li><strong>Toggles (Conmutadores):</strong> Encienden o apagan módulos de síntesis, efectos en cadena (reverb, delay) o activadores de bucles.</li>
-        </ul>
+        <!-- SECCIÓN 1: DEMOSTRACIÓN EN VIDEO -->
+        <div class="arcade-card">
+            <h2>1. DEMOSTRACIÓN DE LA INTERFAZ EN VIVO</h2>
+            <p>Registro audiovisual interactivo demostrando la respuesta sonora y el control en tiempo real del sintetizador:</p>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/aNAfISuBsWk" allowfullscreen></iframe>
+            </div>
+        </div>
 
-        <h2>3. Registro Visual (Modo Presentación vs. Modo Edición)</h2>
-        
-        <h3>Modo Presentación (Interfaz de Usuario)</h3>
-        <p>Vista limpia diseñada exclusivamente para la interpretación e interacción del usuario.</p>
-        <img src="modo_presentacion.png" alt="Modo Presentación Max/MSP">
+        <!-- SECCIÓN 2: FICHA TÉCNICA Y CONTROLES -->
+        <div class="arcade-card">
+            <h2>2. FICHA TÉCNICA Y GUÍA DE CONTROLES</h2>
+            <p>Esta aplicación desarrollada en Max/MSP combina módulos de síntesis de audio, procesamiento en tiempo real e interacción mediante controles visuales:</p>
+            <ul>
+                <li><strong>Bangs (Disparadores):</strong> Envían impulsos instantáneos para activar eventos sonoros, notas individuales o reinicios de parámetros.</li>
+                <li><strong>Sliders / Faders (Deslizadores):</strong> Ofrecen modulación continua sobre envolventes ADSR, frecuencias de corte de filtros y volúmenes principales.</li>
+                <li><strong>Toggles (Conmutadores):</strong> Encienden o apagan módulos de síntesis, efectos en cadena (reverb, delay) o activadores de bucles.</li>
+            </ul>
+        </div>
 
-        <h3>Modo Edición (Programación Visual y Conexiones)</h3>
-        <p>Estructura modular interna del parche mostrando el flujo de señal digital de audio (MSP) y control (Max).</p>
-        <img src="modo_edicion.png" alt="Modo Edición Max/MSP">
+        <!-- SECCIÓN 3: CAPTURAS DE PANTALLA -->
+        <div class="arcade-card">
+            <h2>3. REGISTRO VISUAL DEL PARCHE</h2>
+            
+            <h3>MODO PRESENTACIÓN (INTERFAZ DE USUARIO)</h3>
+            <p>Vista limpia diseñada exclusivamente para la interpretación e interacción del usuario.</p>
+            <img src="modo_presentacion.png" alt="Modo Presentación Max/MSP">
 
-        <h2>4. Archivos de Proyecto</h2>
-        <p>El archivo editable <code>.maxpat</code> y las muestras de audio asociadas se encuentran disponibles para su descarga o inspección en la raíz del repositorio de GitHub.</p>
+            <h3>MODO EDICIÓN (PROGRAMACIÓN VISUAL)</h3>
+            <p>Estructura modular interna del parche mostrando el flujo de señal digital de audio (MSP) y control (Max).</p>
+            <img src="modo_edicion.png" alt="Modo Edición Max/MSP">
+        </div>
+
+        <!-- SECCIÓN 4: ARCHIVOS DE PROYECTO -->
+        <div class="arcade-card" style="border-color: var(--arcade-green);">
+            <h2 style="color: var(--arcade-green);">4. ARCHIVOS DEL REPOSITORIO</h2>
+            <p>El archivo editable <code>.maxpat</code> y las muestras de audio asociadas se encuentran subidos y disponibles en la raíz de esta carpeta dentro del repositorio de GitHub.</p>
+        </div>
     </div>
+
 </body>
 </html>
