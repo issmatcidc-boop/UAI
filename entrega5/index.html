@@ -27,7 +27,7 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--dark-bg);
-            background-image: 
+            background-image:
                 radial-gradient(circle at 50% 20%, rgba(181, 104, 255, 0.2) 0%, transparent 60%),
                 linear-gradient(rgba(181, 104, 255, 0.1) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(181, 104, 255, 0.1) 1px, transparent 1px);
@@ -86,7 +86,6 @@
             border-radius: 16px;
             box-shadow: 0 0 30px var(--neon-violet), inset 0 0 20px var(--neon-violet);
             position: relative;
-            z-index: 1;
             margin-top: 30px;
         }
 
@@ -229,6 +228,10 @@
             border: 2px solid var(--neon-violet);
             border-radius: 8px;
             background: #000;
+        }
+        .game-preview img {
+            position: relative;
+            z-index: 11; /* La captura queda encima de las líneas CRT. */
         }
         .media-controller img {
             max-height: 410px;
