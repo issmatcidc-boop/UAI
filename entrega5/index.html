@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Miniarcade, un mando con Arduino Uno R3 para investigar la Mansión Brumosa en Misterios por todas partes.">
+    <meta name="theme-color" content="#05000a">
+    <title>STAGE 5: MINIARCADE | Misterios por todas partes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-violet: #b568ff;
+            --neon-mint: #63ffdc;
+            --neon-gold: #ffdb52;
+            --dark-bg: #05000a;
+            --text-main: #f3f4f6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--dark-bg);
+            background-image: 
+                radial-gradient(circle at 50% 20%, rgba(181, 104, 255, 0.2) 0%, transparent 60%),
+                linear-gradient(rgba(181, 104, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(181, 104, 255, 0.1) 1px, transparent 1px);
+            background-size: 100% 100%, 35px 35px, 35px 35px;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Líneas CRT sutiles */
+        body::after {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%);
+            background-size: 100% 4px;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.65rem;
+            color: var(--neon-mint);
+            text-decoration: none;
+            background: rgba(5, 0, 10, 0.95);
+            padding: 12px 18px;
+            border-radius: 6px;
+            border: 2px solid var(--neon-mint);
+            box-shadow: 3px 3px 0px var(--neon-violet);
+            z-index: 100;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--neon-mint);
+            color: #000;
+            box-shadow: 3px 3px 0px #fff;
+        }
+
+        .cabinet {
+            max-width: 860px;
+            width: 100%;
+            background: rgba(10, 2, 18, 0.95);
+            border: 4px solid var(--neon-violet);
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 0 30px var(--neon-violet), inset 0 0 20px var(--neon-violet);
+            position: relative;
+            z-index: 1;
+            margin-top: 30px;
+        }
+
+        .arcade-header {
+            font-family: 'Press Start 2P', monospace;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .arcade-header h1 {
+            color: var(--neon-violet);
+            font-size: 1.5rem;
+            text-shadow: 3px 3px #000, 0 0 12px var(--neon-violet);
+            margin-bottom: 12px;
+            line-height: 1.45;
+            animation: glitch 2s infinite alternate;
+        }
+
+        @keyframes glitch {
+            0% { text-shadow: 3px 3px #000, 0 0 12px var(--neon-violet); }
+            90% { text-shadow: 3px 3px #000, 0 0 12px var(--neon-violet); }
+            95% { text-shadow: -3px 2px var(--neon-mint), 0 0 12px var(--neon-violet); }
+            100% { text-shadow: 3px -2px var(--neon-gold), 0 0 12px var(--neon-violet); }
+        }
+
+        .arcade-header .stage-tag {
+            color: var(--neon-gold);
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            line-height: 1.75;
+        }
+
+        /* Paneles de la ficha */
+        .stage-card {
+            background: rgba(3, 0, 7, 0.95);
+            border: 2px solid var(--neon-mint);
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 30px;
+            box-shadow: 4px 4px 0px var(--neon-violet);
+        }
+
+        .stage-card h2 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.95rem;
+            color: var(--neon-mint);
+            margin-bottom: 15px;
+            text-shadow: 2px 2px #000;
+            line-height: 1.4;
+        }
+
+        .stage-card > p, .text-box p {
+            font-size: 0.95rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: #000000;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            border: 1px solid rgba(181, 104, 255, 0.5);
+            padding: 12px;
+            text-align: left;
+            color: #f1f5f9;
+        }
+
+        th {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.65rem;
+            background: rgba(181, 104, 255, 0.3);
+            color: #ffffff;
+            letter-spacing: 1px;
+        }
+
+        .text-box {
+            background: #000000;
+            padding: 18px;
+            border-radius: 8px;
+            border-left: 4px solid var(--neon-violet);
+            margin-top: 18px;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            color: #f1f5f9;
+        }
+
+        .file-btn {
+            display: inline-block;
+            margin-top: 18px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.65rem;
+            color: #000;
+            background: var(--neon-gold);
+            padding: 12px 18px;
+            text-decoration: none;
+            border-radius: 4px;
+            box-shadow: 3px 3px 0px #fff;
+            transition: all 0.2s ease;
+        }
+
+        .file-btn:hover {
+            background: #fff;
+            box-shadow: 3px 3px 0px var(--neon-gold);
+        }
+
+        .stage-card:last-child { margin-bottom: 0; }
+        .text-box > strong { color: var(--neon-mint); }
+        .text-box p + p { margin-top: 8px; }
+        .wire-title {
+            color: var(--neon-mint);
+            font-family: 'Press Start 2P', monospace;
+            font-size: .68rem;
+            line-height: 1.65;
+            margin-top: 26px;
+        }
+        .wire-title + table { margin-top: 10px; }
+        .pin { font: 700 .9rem 'Plus Jakarta Sans', sans-serif; color: var(--neon-gold); white-space: nowrap; }
+        .file-btn { line-height: 1.6; }
+        .file-links { display: flex; flex-wrap: wrap; gap: 0 14px; }
+        .file-link-secondary {
+            color: var(--neon-mint);
+            background: #05000a;
+            box-shadow: 3px 3px 0 var(--neon-violet);
+            border: 1px solid var(--neon-mint);
+        }
+        .file-link-secondary:hover { color: #000; background: var(--neon-mint); }
+        a:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+
+        .media { margin: 20px 0 0; }
+        .media img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border: 2px solid var(--neon-violet);
+            border-radius: 8px;
+            background: #000;
+        }
+        .media-controller img {
+            max-height: 410px;
+            object-fit: contain;
+        }
+        .media figcaption {
+            margin-top: 10px;
+            color: #cbd5e1;
+            font-size: .81rem;
+            line-height: 1.55;
+        }
+
+        @media (max-width: 1350px) {
+            .back-btn { position: relative; top: auto; left: auto; align-self: flex-start; }
+        }
+        @media (max-width: 560px) {
+            body { padding: 16px 12px 24px; }
+            .cabinet { padding: 24px 12px; margin-top: 20px; }
+            .arcade-header { margin-bottom: 22px; }
+            .arcade-header h1 { font-size: 1rem; }
+            .arcade-header .stage-tag { font-size: .57rem; }
+            .stage-card { padding: 14px; }
+            .stage-card h2 { font-size: .76rem; line-height: 1.65; }
+            .stage-card > p, .text-box p { font-size: .875rem; }
+            th, td { padding: 8px; }
+            th { font-size: .56rem; line-height: 1.55; letter-spacing: 0; }
+            .text-box { padding: 12px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .arcade-header h1 { animation: none; }
+        }
+    </style>
+</head>
+<body>
+    <a class="back-btn" href="../">◄ BACK TO ARCADE</a>
+
+    <main class="cabinet">
+        <header class="arcade-header">
+            <h1>STAGE 5: MINIARCADE</h1>
+            <p class="stage-tag">--- SYSTEM TYPE · MANDO FÍSICO CON ARDUINO ---</p>
+        </header>
+
+        <section class="stage-card" aria-labelledby="hardware">
+            <h2 id="hardware">1. EL MANDO ARCADE</h2>
+            <p>Controlador impreso en 3D para jugar <em>Misterios por todas partes</em>. El mando se conecta al computador por USB y el juego se muestra en la pantalla del computador.</p>
+
+            <figure class="media media-controller">
+                <img src="./material/mando-miniarcade.png" alt="Controlador negro con botones morados en cruz, un botón rojo y un deslizador horizontal.">
+                <figcaption>Ilustración del prototipo Miniarcade.</figcaption>
+            </figure>
+
+            <table aria-label="Controles físicos del mando">
+                <thead><tr><th scope="col">CONTROL</th><th scope="col">FUNCIÓN</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Cuatro botones en cruz</strong></td><td>Izquierda y derecha mueven al personaje. Arriba salta y abajo interactúa o activa la habilidad.</td></tr>
+                    <tr><td><strong>Botón rojo</strong></td><td>Confirma en los menús y pausa durante el juego.</td></tr>
+                    <tr><td><strong>Deslizador horizontal</strong></td><td>Cambia de sigilo a carrera. En las pruebas ajusta la radio, el zoom o la luz.</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="stage-card connection-module" aria-labelledby="connections">
+            <h2 id="connections">2. CONEXIONES DEL ARDUINO</h2>
+            <p>El Arduino Uno R3 lee cinco botones digitales y el potenciómetro B103 de 10 kΩ. El cable USB alimenta la placa y transmite las lecturas al juego.</p>
+
+            <h3 class="wire-title" id="digital-inputs">BOTONES</h3>
+            <table aria-labelledby="digital-inputs">
+                <thead><tr><th scope="col">CONTROL</th><th scope="col">PIN DE SEÑAL</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Izquierda</strong></td><td><span class="pin">D2</span></td></tr>
+                    <tr><td><strong>Derecha</strong></td><td><span class="pin">D3</span></td></tr>
+                    <tr><td><strong>Arriba</strong></td><td><span class="pin">D4</span></td></tr>
+                    <tr><td><strong>Abajo</strong></td><td><span class="pin">D5</span></td></tr>
+                    <tr><td><strong>Botón rojo</strong></td><td><span class="pin">D6</span></td></tr>
+                </tbody>
+            </table>
+
+            <h3 class="wire-title" id="analog-input">DESLIZADOR B103</h3>
+            <table aria-labelledby="analog-input">
+                <thead><tr><th scope="col">TERMINAL</th><th scope="col">ARDUINO</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Cursor (señal)</strong></td><td><span class="pin">A0</span></td></tr>
+                    <tr><td><strong>Un extremo de la pista</strong></td><td><span class="pin">5 V</span></td></tr>
+                    <tr><td><strong>Otro extremo</strong></td><td><span class="pin">GND</span></td></tr>
+                </tbody>
+            </table>
+
+            <div class="text-box">
+                <strong>CABLEADO Y MASA COMÚN</strong>
+                <p>En cada botón arcade, <strong>NO</strong> va al pin indicado, <strong>COM</strong> va a GND y <strong>NC</strong> queda libre. En el botón rojo, una pata de un par va a D6 y una pata del otro par va a GND. El deslizador comparte el GND del Arduino.</p>
+            </div>
+            <div class="file-links">
+                <a class="file-btn" href="./material/lamina-miniarcade.pdf">VER LÁMINA (.PDF)</a>
+                <a class="file-btn file-link-secondary" href="./material/arduino_mando_arcade.ino" download>SKETCH ARDUINO (.INO)</a>
+            </div>
+        </section>
+
+        <section class="stage-card" aria-labelledby="game">
+            <h2 id="game">3. INVESTIGA LA MANSIÓN</h2>
+            <p>El fantasma guía enseña a usar el mando en el entrenamiento. Después, en la Mansión Brumosa, sintoniza la radio, revela huellas y reúne pistas para resolver el caso.</p>
+
+            <figure class="media game-preview">
+                <img src="./material/entrenamiento.jpg" width="1280" height="720" loading="lazy" alt="Scooby practica cómo liberarse de una soga mientras el fantasma guía explica los controles.">
+                <figcaption>Pasillo de práctica de Misterios por todas partes.</figcaption>
+            </figure>
+
+            <div class="text-box">
+                <strong>CÓMO JUGAR</strong>
+                <p><strong>Mando USB.</strong> Conecta el Arduino y selecciona <strong>Conectar control</strong> en Chrome o Edge de escritorio.</p>
+                <p><strong>Teclado.</strong> ← → para moverte, ↑ o Espacio para saltar, F para interactuar, Enter para confirmar o pausar y Re Pág / Av Pág para el deslizador.</p>
+            </div>
+            <div class="file-links">
+                <a class="file-btn" href="./juego/">▶ ABRIR LA DEMO</a>
+                <a class="file-btn file-link-secondary" href="./material/portada-consola.png">VER PORTADA</a>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
