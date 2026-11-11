@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="128" viewBox="0 0 512 128" shape-rendering="crispEdges">
+  <title>Vilma · cuatro cuadros de lupa reveladora</title>
+  <g transform="translate(0)">
+    <path d="M45 44h29v29H45z" fill="#172333" stroke="#e9d8b7" stroke-width="3"/><path d="M51 50h17v17H51z" fill="#77969a"/>
+    <path d="M82 78h8v7h-8zM89 85h7v7h-7zM96 92h7v7h-7z" fill="#b77a4d"/>
+    <path d="M34 91h12v4H34zM28 80h8v4h-8z" fill="#f08b48"/>
+    <path d="M116 43h8v8h-8zM127 31h5v5h-5z" fill="#ffe26a"/>
+  </g>
+  <g transform="translate(128)">
+    <path d="M43 38h34v34H43z" fill="#172333" stroke="#e9d8b7" stroke-width="3"/><path d="M49 44h22v22H49z" fill="#99d2d0"/>
+    <path d="M82 76h8v7h-8zM89 83h7v7h-7zM96 90h7v9h-7z" fill="#b77a4d"/>
+    <path d="M31 92h16v4H31zM22 80h12v4H22zM27 68h9v4h-9z" fill="#f08b48"/>
+    <path d="M111 35h10v10h-10zM126 25h6v6h-6zM136 43h6v6h-6z" fill="#ffe26a"/>
+    <path d="M53 49h4v4h-4z" fill="#fff4c8"/>
+  </g>
+  <g transform="translate(256)">
+    <path d="M40 32h39v39H40z" fill="#172333" stroke="#e9d8b7" stroke-width="3"/><path d="M46 38h27v27H46z" fill="#b9ece1"/>
+    <path d="M80 74h9v8h-9zM88 82h8v8h-8zM96 90h8v10h-8z" fill="#b77a4d"/>
+    <path d="M29 94h20v4H29zM18 80h14v4H18zM26 63h10v4H26z" fill="#f08b48"/>
+    <path d="M107 28h12v12h-12zM125 18h7v7h-7zM140 38h7v7h-7zM124 56h7v7h-7z" fill="#fff1a1"/>
+    <path d="M52 45h5v5h-5zM64 54h5v5h-5z" fill="#fff"/>
+  </g>
+  <g transform="translate(384)">
+    <path d="M36 26h44v44H36z" fill="#172333" stroke="#e9d8b7" stroke-width="3"/><path d="M42 32h32v32H42z" fill="#d8f6e6"/>
+    <path d="M79 72h10v8H79zM88 80h9v9h-9zM97 89h9v11h-9z" fill="#b77a4d"/>
+    <path d="M25 94h23v4H25zM14 80h16v4H14zM23 61h12v4H23z" fill="#f08b48"/>
+    <path d="M104 23h13v13h-13zM124 11h8v8h-8zM143 30h8v8h-8zM125 52h8v8h-8zM147 67h6v6h-6z" fill="#ffe26a"/>
+    <path d="M47 38h6v6h-6zM63 51h6v6h-6z" fill="#fff"/>
+  </g>
+</svg>

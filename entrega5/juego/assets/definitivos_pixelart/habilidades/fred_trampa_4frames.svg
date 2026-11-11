@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="128" viewBox="0 0 512 128" shape-rendering="crispEdges">
+  <title>Fred · cuatro cuadros de activación de la trampa</title>
+  <g transform="translate(0)">
+    <path d="M19 92h90v4H19z" fill="#27313b"/>
+    <path d="M33 86h6v-6h6v-7h6v-7h7v-7h7v7h-5v7h-6v7h-6v6h-6v6h-3z" fill="#c28a4e" stroke="#201828" stroke-width="3"/>
+    <path d="M93 81h11v14H93zM90 77h17v5H90z" fill="#80995d" stroke="#20252b" stroke-width="3"/>
+    <path d="M116 62h7v7h-7z" fill="#ffe26a"/>
+  </g>
+  <g transform="translate(128)">
+    <path d="M14 93h101v4H14z" fill="#27313b"/>
+    <path d="M28 87 43 72 37 67 54 51 60 56 76 40 82 46 65 63 71 69 55 84 49 79 39 90z" fill="#c28a4e" stroke="#201828" stroke-width="3"/>
+    <path d="M78 50h28v4H78zM82 54h4v17h-4zM98 54h4v17h-4z" fill="#80995d" stroke="#20252b" stroke-width="2"/>
+    <path d="M111 37h9v9h-9zM122 53h6v6h-6z" fill="#ffe26a"/>
+  </g>
+  <g transform="translate(256)">
+    <path d="M9 94h110v4H9z" fill="#27313b"/>
+    <path d="M22 85 50 55 78 82 106 52" fill="none" stroke="#c28a4e" stroke-width="5"/>
+    <path d="M23 54h5v35h-5zM50 45h5v43h-5zM77 54h5v35h-5zM104 44h5v43h-5z" fill="#80995d" stroke="#20252b" stroke-width="2"/>
+    <path d="M28 55 51 72 78 55 104 75" fill="none" stroke="#ffe26a" stroke-width="3"/>
+    <path d="M112 32h10v10h-10zM124 51h7v7h-7z" fill="#fff1a1"/>
+  </g>
+  <g transform="translate(384)">
+    <path d="M7 96h114v4H7z" fill="#27313b"/>
+    <path d="M18 82 45 49 73 82 105 47" fill="none" stroke="#c28a4e" stroke-width="5"/>
+    <path d="M20 47h7v42h-7zM45 37h7v50h-7zM72 47h7v42h-7zM103 35h7v52h-7z" fill="#80995d" stroke="#20252b" stroke-width="2"/>
+    <path d="M27 49 49 69 75 49 106 73M27 79 49 59 75 79 106 55" fill="none" stroke="#ffe26a" stroke-width="3"/>
+    <path d="M42 59h28v20H42z" fill="#d8e5db" opacity=".38"/>
+    <path d="M112 28h11v11h-11zM126 49h8v8h-8zM111 72h7v7h-7z" fill="#fff1a1"/>
+  </g>
+</svg>

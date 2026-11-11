@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="128" viewBox="0 0 512 128" shape-rendering="crispEdges">
+  <title>Shaggy · cuatro cuadros de galleta señuelo</title>
+  <g transform="translate(0)">
+    <path d="M18 92h25v4H18zM35 82h10v4H35zM50 72h10v4H50z" fill="#8fd16b" opacity=".8"/>
+    <path d="M73 48h8v-5h8v-4h12v5h8v6h7v13h-6v8h-9v5H83v-5h-8v-7h-5V54h3z" fill="#4b291c" stroke="#211522" stroke-width="4"/>
+    <path d="M80 49h26v6h6v12h-9v5H83v-5h-7V55h4z" fill="#c77b3d"/>
+    <path d="M85 51h5v4h-5zM101 58h5v5h-5zM88 66h5v4h-5z" fill="#44251d"/>
+    <path d="M133 44h8v8h-8zM145 58h6v6h-6z" fill="#ffe26a"/>
+  </g>
+  <g transform="translate(128)">
+    <path d="M14 93h31v4H14zM26 81h16v4H26zM45 68h16v4H45z" fill="#8fd16b" opacity=".84"/>
+    <g transform="rotate(-18 86 61)">
+      <path d="M63 47h8v-5h9v-4h12v5h8v6h7v13h-6v8h-9v5H73v-5h-8v-7h-5V53h3z" fill="#4b291c" stroke="#211522" stroke-width="4"/>
+      <path d="M70 48h26v6h6v12h-9v5H73v-5h-7V54h4z" fill="#c77b3d"/>
+      <path d="M75 50h5v4h-5zM91 57h5v5h-5zM78 65h5v4h-5z" fill="#44251d"/>
+    </g>
+    <path d="M120 37h8v8h-8zM133 54h6v6h-6zM119 76h7v7h-7z" fill="#ffe26a"/>
+  </g>
+  <g transform="translate(256)">
+    <path d="M8 94h28v4H8zM21 80h20v4H21zM42 62h19v4H42zM63 44h17v4H63z" fill="#8fd16b" opacity=".88"/>
+    <g transform="rotate(19 87 61)">
+      <path d="M63 47h8v-5h9v-4h12v5h8v6h7v13h-6v8h-9v5H73v-5h-8v-7h-5V53h3z" fill="#4b291c" stroke="#211522" stroke-width="4"/>
+      <path d="M70 48h26v6h6v12h-9v5H73v-5h-7V54h4z" fill="#d68a46"/>
+      <path d="M75 50h5v4h-5zM91 57h5v5h-5zM78 65h5v4h-5z" fill="#44251d"/>
+    </g>
+    <path d="M122 32h9v9h-9zM138 52h7v7h-7zM122 79h8v8h-8zM151 70h5v5h-5z" fill="#ffe26a"/>
+  </g>
+  <g transform="translate(384)">
+    <path d="M5 96h31v4H5zM17 80h22v4H17zM39 63h20v4H39zM60 43h20v4H60z" fill="#8fd16b"/>
+    <path d="M68 45h11v-5h11v5h8v7h7v14h-7v8h-9v6H73v-6h-8v-8h-5V52h8z" fill="#4b291c" stroke="#211522" stroke-width="4"/>
+    <path d="M73 48h23v6h6v12h-9v6H75v-6h-7V54h5z" fill="#d9904d"/>
+    <path d="M77 50h5v4h-5zM92 57h5v5h-5zM81 66h5v4h-5z" fill="#44251d"/>
+    <path d="M119 30h10v10h-10zM138 48h8v8h-8zM119 77h9v9h-9zM154 67h6v6h-6z" fill="#fff2a3"/>
+  </g>
+</svg>
