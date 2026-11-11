@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Controlador | Faro de alertas en Morse</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --noche:#0D2233; --panel:#143247; --linea:#2B4D63; --espuma:#EAF1F3;
+  --tenue:#9DB4C0; --lampara:#FFC95C; --alerta:#F25C54; --ok:#5ED0A0;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--noche);color:var(--espuma);font:400 17px/1.5 "Source Sans 3",system-ui,sans-serif;min-height:100vh}
+main{max-width:860px;margin:0 auto;padding:32px 20px 56px}
+h1{font:800 clamp(2rem,6vw,3.2rem)/1.05 "Bricolage Grotesque",system-ui,sans-serif;margin:0 0 6px;letter-spacing:-.01em}
+.sub{color:var(--tenue);margin:0 0 28px;max-width:56ch}
+h2{font:600 1.1rem/1.2 "Bricolage Grotesque",system-ui,sans-serif;margin:0 0 12px}
+
+/* Faro: 8 lámparas */
+.faro{background:var(--panel);border:2px solid var(--linea);border-radius:18px;padding:26px 20px 20px;margin-bottom:22px}
+.lamparas{display:grid;grid-template-columns:repeat(8,1fr);gap:clamp(6px,2vw,16px);margin-bottom:20px}
+.lampara{aspect-ratio:1;border-radius:50%;background:#0A1A27;border:2px solid var(--linea);transition:background .04s,box-shadow .04s}
+.lampara.on{background:var(--lampara);border-color:#FFE29A;box-shadow:0 0 22px 6px rgba(255,201,92,.65)}
+.estado{display:flex;flex-wrap:wrap;gap:6px 24px;align-items:baseline;min-height:3.2rem}
+.palabra{font:800 2rem/1 "Bricolage Grotesque",system-ui,sans-serif;letter-spacing:.04em}
+.morse{font:600 1.5rem/1 ui-monospace,Menlo,Consolas,monospace;color:var(--lampara);letter-spacing:.12em;word-break:break-all}
+.reposo{color:var(--tenue)}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media (max-width:720px){.grid{grid-template-columns:1fr}}
+.caja{background:var(--panel);border:1px solid var(--linea);border-radius:12px;padding:18px}
+
+button{font:600 1rem/1.2 "Source Sans 3",system-ui,sans-serif;border-radius:8px;border:2px solid var(--linea);background:transparent;color:var(--espuma);padding:12px 16px;cursor:pointer}
+button:hover{border-color:var(--tenue)}
+button:disabled{cursor:wait;opacity:.6}
+.volver{display:inline-block;margin-bottom:20px;color:var(--lampara);text-decoration:none;border-bottom:1px solid var(--linea)}
+.volver:focus-visible{outline:3px solid var(--lampara);outline-offset:4px}
+button:focus-visible,input:focus-visible{outline:3px solid var(--lampara);outline-offset:2px}
+button.principal{background:var(--lampara);border-color:var(--lampara);color:#1A1405}
+button.principal:hover{background:#FFD982}
+button.activo{background:var(--alerta);border-color:var(--alerta);color:#fff}
+.fila{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px}
+.chip-estado{font-size:.95rem;color:var(--tenue)}
+.chip-estado b{color:var(--espuma)}
+.punto{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--linea);margin-right:6px}
+.punto.si{background:var(--ok)}
+
+label.opcion{display:flex;gap:10px;align-items:center;margin:14px 0 0;color:var(--tenue);cursor:pointer}
+input[type=checkbox]{width:18px;height:18px;accent-color:var(--lampara)}
+input[type=text]{background:#0A1A27;border:2px solid var(--linea);color:var(--espuma);border-radius:8px;padding:11px 12px;font:inherit;flex:1;min-width:0}
+
+.alertas{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px;padding:0;list-style:none}
+.alertas li{display:flex;border:2px solid var(--linea);border-radius:999px;overflow:hidden}
+.alertas li button{border:0;border-radius:0;padding:8px 12px}
+.alertas li button.quitar{color:var(--tenue);padding:8px 12px 8px 4px}
+.alertas li button.quitar:hover{color:var(--alerta)}
+
+.escucha{min-height:3em;color:var(--tenue);font-style:italic;margin:0 0 12px}
+#registro{list-style:none;margin:0;padding:0;max-height:220px;overflow:auto;font-size:.95rem}
+#registro li{padding:6px 0;border-top:1px solid var(--linea)}
+#registro .hora{color:var(--tenue);margin-right:8px;font-variant-numeric:tabular-nums}
+#registro .enviado{color:var(--lampara);font-weight:600}
+.aviso{background:#3A1E22;border:1px solid var(--alerta);border-radius:10px;padding:12px 14px;margin-bottom:20px;display:none}
+.ayuda{color:var(--tenue);font-size:.95rem;margin:12px 0 0}
+</style>
+</head>
+<body>
+<main>
+  <nav aria-label="Entrega 6"><a class="volver" href="./">← Volver a la presentación del faro</a></nav>
+  <h1>Faro de alertas en Morse</h1>
+  <p class="sub">Di una palabra de alerta frente al micrófono. El faro la emite en código Morse con sus 8 luces y la envía al Arduino.</p>
+
+  <div class="aviso" id="aviso"></div>
+
+  <section class="faro" aria-label="Faro">
+    <div class="lamparas" id="lamparas"></div>
+    <div class="estado" aria-live="polite">
+      <span class="palabra reposo" id="palabraActual">En espera</span>
+      <span class="morse" id="morseActual"></span>
+    </div>
+  </section>
+
+  <div class="grid">
+    <section class="caja">
+      <h2>Conexiones</h2>
+      <div class="fila">
+        <button class="principal" id="btnArduino">Conectar Arduino</button>
+        <span class="chip-estado"><span class="punto" id="puntoArduino"></span><span id="txtArduino">Sin conectar</span></span>
+      </div>
+      <div class="fila">
+        <button id="btnMic">Escuchar</button>
+        <span class="chip-estado"><span class="punto" id="puntoMic"></span><span id="txtMic">Micrófono apagado</span></span>
+      </div>
+      <label class="opcion"><input type="checkbox" id="chkTodo"> Emitir todo lo que escuche, no solo las palabras de alerta</label>
+      <p class="ayuda">La página también funciona sin Arduino: las luces de arriba simulan el faro.</p>
+    </section>
+
+    <section class="caja">
+      <h2>Palabras de alerta</h2>
+      <ul class="alertas" id="listaAlertas"></ul>
+      <form class="fila" id="formAlerta" style="margin:0">
+        <input type="text" id="nuevaAlerta" placeholder="Nueva palabra" maxlength="20" autocomplete="off" aria-label="Nueva palabra de alerta">
+        <button type="submit">Agregar</button>
+      </form>
+      <p class="ayuda">Toca una palabra para probarla sin hablar.</p>
+    </section>
+  </div>
+
+  <section class="caja" style="margin-top:22px">
+    <h2>Lo que escucha el micrófono</h2>
+    <p class="escucha" id="escucha">Presiona Escuchar y habla.</p>
+    <ul id="registro"></ul>
+  </section>
+</main>
+
+<script>
+"use strict";
+
+/* ---------- Configuración (UNIDAD debe ser igual en faro.ino) ---------- */
+const UNIDAD = 200; // ms de un punto
+const MORSE = {
+  A:".-",B:"-...",C:"-.-.",D:"-..",E:".",F:"..-.",G:"--.",H:"....",I:"..",J:".---",
+  K:"-.-",L:".-..",M:"--",N:"-.",O:"---",P:".--.",Q:"--.-",R:".-.",S:"...",T:"-",
+  U:"..-",V:"...-",W:".--",X:"-..-",Y:"-.--",Z:"--.."
+};
+const ALERTAS_INICIALES = ["SOS","AYUDA","FUEGO","PELIGRO"];
+
+/* ---------- Utilidades ---------- */
+const $ = id => document.getElementById(id);
+const dormir = ms => new Promise(r => setTimeout(r, ms));
+const limpiar = t => t.normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+  .replace(/[^a-zA-Z ]/g," ").replace(/\s+/g," ").trim().toUpperCase();
+
+function guardar(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+function leer(k,def){ try{ const v=JSON.parse(localStorage.getItem(k)); return v ?? def; }catch(e){ return def; } }
+
+/* ---------- Lámparas ---------- */
+const lamparas = [];
+for(let i=0;i<8;i++){
+  const d=document.createElement("div"); d.className="lampara"; $("lamparas").appendChild(d); lamparas.push(d);
+}
+const encender = on => lamparas.forEach(l => l.classList.toggle("on", on));
+
+/* Misma temporización que el Arduino */
+function secuencia(palabra){
+  const s=[];
+  for(const c of palabra){
+    if(c===" "){ s.push([false,4*UNIDAD]); continue; }
+    const cod=MORSE[c]; if(!cod) continue;
+    for(const x of cod){ s.push([true, x==="."?UNIDAD:3*UNIDAD]); s.push([false,UNIDAD]); }
+    s.push([false,2*UNIDAD]);
+  }
+  return s;
+}
+function aMorseTexto(palabra){
+  return palabra.split(" ").map(w=>[...w].map(c=>(MORSE[c]||"").replace(/\./g,"·").replace(/-/g,"−")).join(" ")).join("   /   ");
+}
+
+/* ---------- Cola de emisión ---------- */
+const cola = [];
+let ocupado = false;
+
+function pedirEmision(palabra){
+  if(!palabra) return;
+  if(cola.includes(palabra) || cola.length>=3) return;
+  cola.push(palabra);
+  procesarCola();
+}
+
+async function procesarCola(){
+  if(ocupado) return;
+  ocupado = true;
+  while(cola.length){
+    const palabra = cola.shift();
+    $("palabraActual").textContent = palabra;
+    $("palabraActual").classList.remove("reposo");
+    $("morseActual").textContent = aMorseTexto(palabra);
+    registrar(`Emitiendo ${palabra}`, true);
+    await enviarSerial(palabra);
+    for(const [on,ms] of secuencia(palabra)){ encender(on); await dormir(ms); }
+    encender(false);
+  }
+  $("palabraActual").textContent = "En espera";
+  $("palabraActual").classList.add("reposo");
+  $("morseActual").textContent = "";
+  ocupado = false;
+}
+
+/* ---------- Arduino (Web Serial) ---------- */
+let puerto = null, escritor = null;
+
+async function enviarSerial(palabra){
+  if(!escritor) return;
+  try{ await escritor.write(new TextEncoder().encode(palabra+"\n")); }
+  catch(e){ registrar("No se pudo enviar al Arduino: "+e.message); await desconectar(); }
+}
+
+async function conectar(){
+  $("btnArduino").disabled = true;
+  $("txtArduino").textContent = "Conectando…";
+  try{
+    puerto = await navigator.serial.requestPort();
+    await puerto.open({baudRate:9600});
+    await dormir(2000); // el Arduino se reinicia al abrir el puerto
+    escritor = puerto.writable.getWriter();
+    $("puntoArduino").classList.add("si");
+    $("txtArduino").innerHTML = "<b>Arduino conectado</b>";
+    $("btnArduino").textContent = "Desconectar";
+    $("btnArduino").classList.remove("principal");
+  }catch(e){
+    await desconectar();
+    if(e.name!=="NotFoundError") registrar("No se pudo conectar: "+e.message);
+  }finally{
+    $("btnArduino").disabled = false;
+  }
+}
+
+async function desconectar(){
+  try{ if(escritor){ escritor.releaseLock(); } if(puerto){ await puerto.close(); } }catch(e){}
+  puerto=null; escritor=null;
+  $("puntoArduino").classList.remove("si");
+  $("txtArduino").textContent = "Sin conectar";
+  $("btnArduino").textContent = "Conectar Arduino";
+  $("btnArduino").classList.add("principal");
+}
+
+$("btnArduino").addEventListener("click", () => puerto ? desconectar() : conectar());
+
+/* ---------- Palabras de alerta ---------- */
+let alertas = leer("alertas", ALERTAS_INICIALES);
+
+function pintarAlertas(){
+  const ul = $("listaAlertas"); ul.innerHTML = "";
+  alertas.forEach(p => {
+    const li = document.createElement("li");
+    const probar = document.createElement("button");
+    probar.type="button"; probar.textContent=p; probar.title="Probar "+p;
+    probar.addEventListener("click", () => pedirEmision(p));
+    const quitar = document.createElement("button");
+    quitar.type="button"; quitar.className="quitar"; quitar.textContent="×"; quitar.setAttribute("aria-label","Quitar "+p);
+    quitar.addEventListener("click", () => { alertas = alertas.filter(x=>x!==p); guardar("alertas",alertas); pintarAlertas(); });
+    li.append(probar, quitar); ul.appendChild(li);
+  });
+}
+$("formAlerta").addEventListener("submit", e => {
+  e.preventDefault();
+  const p = limpiar($("nuevaAlerta").value);
+  if(p && !alertas.includes(p)){ alertas.push(p); guardar("alertas",alertas); pintarAlertas(); }
+  $("nuevaAlerta").value = "";
+});
+pintarAlertas();
+
+/* ---------- Registro ---------- */
+function registrar(texto, enviado){
+  const li = document.createElement("li");
+  const h = new Date().toLocaleTimeString("es-CL",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+  li.innerHTML = `<span class="hora">${h}</span>`;
+  const s = document.createElement("span"); s.textContent = texto; if(enviado) s.className="enviado";
+  li.appendChild(s);
+  $("registro").prepend(li);
+  while($("registro").children.length>40) $("registro").lastChild.remove();
+}
+
+/* ---------- Reconocimiento de voz ---------- */
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let rec = null, escuchando = false;
+
+function procesarTexto(texto){
+  const limpio = limpiar(texto).replace(/\b(?:S O S|ESE O ESE)\b/g, "SOS");
+  if(!limpio) return;
+  if($("chkTodo").checked){ pedirEmision(limpio.slice(0,30).trim()); return; }
+  // Coincidencias completas, incluidas las alertas con más de una palabra.
+  const unido = limpio.replace(/ /g,"");
+  const hallados = new Set();
+  alertas.forEach(a => { if((" "+limpio+" ").includes(" "+a+" ") || unido===a) hallados.add(a); });
+  hallados.forEach(pedirEmision);
+}
+
+function iniciarMic(){
+  rec = new SR();
+  rec.lang = "es-CL";
+  rec.continuous = true;
+  rec.interimResults = true;
+  rec.onresult = e => {
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      const r = e.results[i], t = r[0].transcript.trim();
+      if(r.isFinal){ $("escucha").textContent = "“"+t+"”"; registrar("Escuchó: "+t); procesarTexto(t); }
+      else { $("escucha").textContent = t+"…"; }
+    }
+  };
+  rec.onerror = e => {
+    if(e.error==="not-allowed"||e.error==="service-not-allowed"){
+      registrar("El navegador bloqueó el micrófono. Permite el acceso en la barra de direcciones.");
+      detenerMic();
+    } else if(e.error!=="no-speech" && e.error!=="aborted"){ registrar("Error de voz: "+e.error); }
+  };
+  rec.onend = () => { if(escuchando){ try{ rec.start(); }catch(e){} } };
+  rec.start();
+  escuchando = true;
+  $("btnMic").textContent = "Dejar de escuchar";
+  $("btnMic").classList.add("activo");
+  $("puntoMic").classList.add("si");
+  $("txtMic").innerHTML = "<b>Escuchando</b>";
+}
+function detenerMic(){
+  escuchando = false;
+  try{ rec && rec.stop(); }catch(e){}
+  $("btnMic").textContent = "Escuchar";
+  $("btnMic").classList.remove("activo");
+  $("puntoMic").classList.remove("si");
+  $("txtMic").textContent = "Micrófono apagado";
+}
+$("btnMic").addEventListener("click", () => escuchando ? detenerMic() : iniciarMic());
+
+/* ---------- Compatibilidad ---------- */
+const problemas = [];
+if(!SR){ problemas.push("Este navegador no tiene reconocimiento de voz. Usa Chrome o Edge."); $("btnMic").disabled = true; }
+if(!("serial" in navigator)){ problemas.push("Este navegador no puede hablar con el Arduino (Web Serial). Usa Chrome o Edge en el computador."); $("btnArduino").disabled = true; }
+if(problemas.length){ $("aviso").style.display="block"; $("aviso").innerHTML = problemas.join("<br>"); }
+</script>
+</body>
+</html>

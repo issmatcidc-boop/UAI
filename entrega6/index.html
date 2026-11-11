@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Proyecto grupal de Taller de Interfaces UAI. Un faro convierte alertas de voz en destellos Morse con Arduino.">
+    <meta name="theme-color" content="#071320">
+    <title>STAGE 6: FARO MORSE | Taller de Interfaces</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: dark;
+            --noche: #071320;
+            --panel: #0c1d2b;
+            --linea: #305168;
+            --luz: #ffc95c;
+            --mar: #8addf5;
+            --texto: #edf5f8;
+            --tenue: #b3c7d3;
+            --pixel: 'Press Start 2P', monospace;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 28px 20px 48px;
+            color: var(--texto);
+            background-color: var(--noche);
+            background-image:
+                radial-gradient(ellipse at 50% 0%, #204460 0%, transparent 60%),
+                linear-gradient(#8addf516 1px, transparent 1px),
+                linear-gradient(90deg, #8addf516 1px, transparent 1px);
+            background-size: 100% 640px, 36px 36px, 36px 36px;
+            background-repeat: no-repeat, repeat, repeat;
+            font: 400 1.0625rem/1.6 'Source Sans 3', system-ui, sans-serif;
+        }
+
+        .navegacion, main { width: min(100%, 940px); margin-inline: auto; }
+        .navegacion { margin-bottom: 18px; }
+        main {
+            display: grid;
+            gap: 24px;
+            padding: clamp(14px, 3vw, 32px);
+            background: #081724;
+            border: 3px solid var(--mar);
+            border-radius: 16px;
+            box-shadow: 0 0 24px #55c3e34d, inset 0 0 18px #55c3e31a;
+        }
+
+        h1, h2, h3, p, figure { margin: 0; }
+        h1, h2 { font-family: var(--pixel); }
+        h1 {
+            margin-block: 14px 18px;
+            color: var(--luz);
+            font-size: clamp(1.25rem, 3.6vw, 2rem);
+            line-height: 1.55;
+            text-shadow: 3px 3px #603f20;
+        }
+        h2 { color: var(--mar); font-size: clamp(.82rem, 2vw, 1.05rem); line-height: 1.65; }
+        h3 { color: var(--luz); font-size: 1.1rem; }
+        p, li, figcaption { color: var(--tenue); }
+        strong { color: var(--texto); }
+
+        .proyecto {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
+            align-items: center;
+            gap: clamp(18px, 4vw, 40px);
+            padding: clamp(10px, 2vw, 18px);
+        }
+        .etiqueta {
+            color: var(--mar);
+            font: .7rem/1.65 var(--pixel);
+        }
+        .proyecto p + p { margin-top: 12px; }
+        .proyecto .etiqueta + h1 { margin-top: 14px; }
+        .proyecto img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid var(--linea);
+        }
+        .proyecto figure { max-width: 300px; }
+        figcaption { margin-top: 6px; font-size: .9rem; }
+
+        .boton {
+            display: inline-block;
+            padding: 10px 14px;
+            border: 2px solid var(--luz);
+            border-radius: 6px;
+            background: var(--luz);
+            color: #1d1507;
+            box-shadow: 3px 3px 0 #896123;
+            font: .68rem/1.6 var(--pixel);
+            text-decoration: none;
+        }
+        .boton:hover { background: #ffe1a0; }
+        .boton.secundario {
+            border-color: var(--mar);
+            background: var(--noche);
+            color: var(--mar);
+            box-shadow: 3px 3px 0 #305168;
+        }
+        .boton.secundario:hover { background: #18374c; }
+        a:focus-visible { outline: 3px solid var(--luz); outline-offset: 4px; }
+        .acciones { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+
+        .panel {
+            display: grid;
+            gap: 12px;
+            min-width: 0;
+            padding: clamp(14px, 2.8vw, 25px);
+            background: var(--panel);
+            border: 1px solid var(--mar);
+            border-radius: 10px;
+            box-shadow: 3px 3px 0 #7f5c2f;
+        }
+        ol { margin: 0; padding-left: 1.45rem; }
+        ol li + li { margin-top: 6px; }
+        ol li::marker { color: var(--luz); font-weight: 700; }
+        .morse {
+            margin-top: 4px;
+            padding: 11px 14px;
+            border-left: 3px solid var(--luz);
+            background: var(--noche);
+            color: var(--texto);
+        }
+        .morse code { color: var(--luz); font-size: 1.1rem; }
+
+        .galeria {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+        .galeria img, .lamina img, video {
+            display: block;
+            width: 100%;
+            height: auto;
+            border: 1px solid var(--linea);
+            border-radius: 8px;
+            background: var(--noche);
+        }
+        .galeria img { aspect-ratio: 4 / 3; object-fit: cover; }
+        .galeria img:hover, .lamina img:hover { border-color: var(--luz); }
+        video { aspect-ratio: 16 / 9; max-height: 560px; object-fit: contain; }
+        .enlace { color: var(--mar); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 8px 10px; border: 1px solid var(--linea); text-align: left; }
+        thead th { background: #19364a; }
+        tbody th { color: var(--luz); font-family: monospace; }
+        .nota { font-size: .95rem; }
+
+        @media (max-width: 700px) {
+            .proyecto { grid-template-columns: 1fr; }
+            .proyecto figure { justify-self: center; }
+        }
+        @media (max-width: 430px) {
+            body { padding-inline: 12px; }
+            .galeria { grid-template-columns: 1fr; }
+            th, td { padding: 6px 7px; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navegacion" aria-label="Portafolio">
+        <a class="boton secundario" href="../">← PORTAFOLIO</a>
+    </nav>
+
+    <main>
+        <header class="proyecto">
+            <div>
+                <p class="etiqueta">STAGE 6 · FARO MORSE</p>
+                <h1>Faro de alertas en código Morse</h1>
+                <p class="credito">Proyecto grupal de Taller de Interfaces · UAI</p>
+                <p>Una interfaz reconoce alertas por voz y las convierte en señales luminosas. Ocho LEDs ámbar reproducen los puntos y las rayas del mensaje en un faro impreso en 3D.</p>
+                <div class="acciones">
+                    <a class="boton" href="./controlador.html">ABRIR CONTROLADOR</a>
+                    <a class="boton secundario" href="#demostracion">VER VIDEO</a>
+                </div>
+            </div>
+            <figure>
+                <img src="./fotos/faro-encendido.jpg" width="1441" height="1921" alt="Faro impreso en 3D con la linterna encendida en ámbar durante una prueba.">
+                <figcaption>Prototipo del faro en funcionamiento.</figcaption>
+            </figure>
+        </header>
+
+        <section class="panel" aria-labelledby="funcionamiento">
+            <h2 id="funcionamiento">Cómo funciona</h2>
+            <ol>
+                <li>El micrófono del computador capta una alerta y el navegador la reconoce en español de Chile.</li>
+                <li>La interfaz busca palabras como <strong>SOS</strong>, <strong>AYUDA</strong>, <strong>FUEGO</strong> y <strong>PELIGRO</strong>. Puedes añadir tus propias alertas.</li>
+                <li>Si el Arduino está conectado, la página envía el mensaje por USB a 9600 baudios. El Arduino convierte las letras a Morse y enciende los ocho LEDs al mismo tiempo.</li>
+            </ol>
+            <p class="morse"><strong>SOS</strong> en Morse <code>··· −−− ···</code>. Cada punto dura 200 ms y cada raya, 600 ms.</p>
+            <p>En el controlador, selecciona una palabra para ver la simulación sin Arduino. Para probar la voz o el faro físico, abre el controlador en Chrome de escritorio y habilita el micrófono o conecta la placa por USB.</p>
+        </section>
+
+        <section class="panel" aria-labelledby="proceso">
+            <h2 id="proceso">Construcción del faro</h2>
+            <div class="galeria">
+                <figure>
+                    <a href="./fotos/soldadura.jpg" target="_blank" rel="noopener">
+                        <img src="./fotos/soldadura.jpg" alt="Soldadura de un cable a la tira de LEDs." loading="lazy">
+                    </a>
+                    <figcaption>Soldadura de los cables a la tira.</figcaption>
+                </figure>
+                <figure>
+                    <a href="./fotos/piezas.jpg" target="_blank" rel="noopener">
+                        <img src="./fotos/piezas.jpg" alt="Base, cuerpo, difusor, soporte y techo del faro desmontados." loading="lazy">
+                    </a>
+                    <figcaption>Piezas impresas en 3D antes del montaje.</figcaption>
+                </figure>
+                <figure>
+                    <a href="./fotos/ensamblaje.jpg" target="_blank" rel="noopener">
+                        <img src="./fotos/ensamblaje.jpg" alt="Faro ensamblado con los LEDs visibles alrededor de su soporte." loading="lazy">
+                    </a>
+                    <figcaption>Montaje de la tira en la linterna.</figcaption>
+                </figure>
+                <figure>
+                    <a href="./fotos/faro-encendido.jpg" target="_blank" rel="noopener">
+                        <img src="./fotos/faro-encendido.jpg" alt="Prototipo terminado con el difusor instalado y las luces encendidas." loading="lazy">
+                    </a>
+                    <figcaption>Prueba del faro con el difusor instalado.</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="panel" aria-labelledby="demostracion">
+            <h2 id="demostracion">Video explicativo</h2>
+            <video controls playsinline preload="none" poster="./video/portada.jpg" aria-label="Demostración del faro Morse">
+                <source src="./video/explicativo.mp4" type="video/mp4">
+                <a href="./video/explicativo.mp4">Abrir video explicativo</a>
+            </video>
+        </section>
+
+        <section class="panel" aria-labelledby="conexiones">
+            <h2 id="conexiones">Conexiones y código Arduino</h2>
+            <table aria-label="Conexiones del faro">
+                <thead>
+                    <tr><th scope="col">Tira de 8 LEDs WS2812</th><th scope="col">Arduino Uno</th></tr>
+                </thead>
+                <tbody>
+                    <tr><th scope="row">5V</th><td>5V</td></tr>
+                    <tr><th scope="row">GND</th><td>GND</td></tr>
+                    <tr><th scope="row">DIN</th><td>D4</td></tr>
+                </tbody>
+            </table>
+            <p>El sketch usa la biblioteca <strong>Adafruit NeoPixel</strong>. Al iniciar, los ocho LEDs se encienden durante un segundo para comprobar el montaje.</p>
+            <div class="acciones">
+                <a class="boton secundario" href="./arduino/faro/faro.ino" download>DESCARGAR FARO.INO</a>
+            </div>
+        </section>
+
+        <section class="panel" aria-labelledby="documentacion">
+            <h2 id="documentacion">Lámina del proyecto</h2>
+            <p class="nota">En la lámina original figura «DO». La conexión de datos del montaje va de D4 del Arduino a la entrada DIN de la tira. <a class="enlace" href="https://learn.adafruit.com/adafruit-neopixel-uberguide/basic-connections">Guía de conexiones de Adafruit</a></p>
+            <figure class="lamina">
+                <a href="./lamina/faro-morse.png" target="_blank" rel="noopener">
+                    <img src="./lamina/faro-morse.png" alt="Infografía con los componentes, el flujo de voz a luz y ejemplos de código Morse." loading="lazy">
+                </a>
+                <figcaption>Selecciona la lámina para verla en tamaño completo.</figcaption>
+            </figure>
+        </section>
+    </main>
+</body>
+</html>
