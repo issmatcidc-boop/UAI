@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="1024" viewBox="0 0 1536 1024" shape-rendering="crispEdges">
+<g fill="none" stroke="#7651a5" stroke-width="5" stroke-linecap="square" opacity="0.45">
+<ellipse cx="777" cy="509" rx="85" ry="105"/>
+<ellipse cx="780" cy="513" rx="96" ry="120"/>
+<ellipse cx="783" cy="517" rx="107" ry="135"/>
+<ellipse cx="777" cy="521" rx="118" ry="150"/>
+<ellipse cx="780" cy="509" rx="129" ry="165"/>
+<ellipse cx="783" cy="513" rx="140" ry="180"/>
+<ellipse cx="777" cy="517" rx="151" ry="195"/>
+<ellipse cx="780" cy="521" rx="162" ry="210"/>
+<ellipse cx="783" cy="509" rx="173" ry="225"/>
+</g>
+<rect x="861" y="351" width="11" height="11" fill="#a36cda" opacity="0.41"/>
+<rect x="633" y="586" width="5" height="5" fill="#a36cda" opacity="0.41"/>
+<rect x="920" y="694" width="8" height="8" fill="#a36cda" opacity="0.41"/>
+<rect x="744" y="380" width="11" height="11" fill="#a36cda" opacity="0.41"/>
+<rect x="716" y="342" width="5" height="5" fill="#a36cda" opacity="0.41"/>
+<rect x="923" y="649" width="8" height="8" fill="#a36cda" opacity="0.41"/>
+<rect x="624" y="611" width="11" height="11" fill="#a36cda" opacity="0.41"/>
+<rect x="850" y="326" width="5" height="5" fill="#a36cda" opacity="0.41"/>
+<rect x="826" y="453" width="8" height="8" fill="#a36cda" opacity="0.41"/>
+<rect x="646" y="754" width="11" height="11" fill="#a36cda" opacity="0.41"/>
+<rect x="948" y="518" width="5" height="5" fill="#a36cda" opacity="0.41"/>
+<rect x="678" y="328" width="8" height="8" fill="#a36cda" opacity="0.41"/>
+<rect x="754" y="564" width="11" height="11" fill="#a36cda" opacity="0.41"/>
+<rect x="901" y="724" width="5" height="5" fill="#a36cda" opacity="0.41"/>
+</svg>
