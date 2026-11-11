@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="128" viewBox="0 0 512 128" shape-rendering="crispEdges">
+  <title>Daphne · cuatro cuadros del golpe de patada</title>
+  <g transform="translate(0)">
+    <path d="M20 83h14v8H20zM35 75h14v8H35zM48 67h13v8H48z" fill="#9e67d7" opacity=".75"/>
+    <path d="M65 80h24v8H65zM81 72h18v8H81zM93 62h17v8H93z" fill="#f0c36a"/>
+    <path d="M76 79h29v7H76zM94 70h22v7H94z" fill="#402349"/>
+    <path d="M123 44h8v8h-8zM137 60h6v6h-6z" fill="#f6e5fc"/>
+  </g>
+  <g transform="translate(128)">
+    <path d="M12 82h25v7H12zM32 72h22v7H32zM53 63h18v7H53zM73 55h18v7H73z" fill="#a675e5" opacity=".82"/>
+    <path d="M54 77h26v8H54zM73 68h26v8H73zM95 60h18v8H95z" fill="#f4c76b"/>
+    <path d="M61 78h37v7H61zM80 69h30v7H80z" fill="#402349"/>
+    <path d="M115 43h10v10h-10zM132 53h8v8h-8zM145 68h6v6h-6z" fill="#fff0a3"/>
+  </g>
+  <g transform="translate(256)">
+    <path d="M8 82h33v7H8zM26 70h29v7H26zM48 59h26v7H48zM72 48h22v7H72z" fill="#a675e5" opacity=".9"/>
+    <path d="M48 75h36v9H48zM70 65h37v9H70zM96 56h22v9H96z" fill="#f6d578"/>
+    <path d="M57 76h47v8H57zM79 66h37v8H79z" fill="#402349"/>
+    <path d="M112 36h12v12h-12zM132 46h10v10h-10zM149 61h8v8h-8zM127 77h7v7h-7z" fill="#fff1a1"/>
+    <path d="M22 41h8v8h-8zM40 31h6v6h-6z" fill="#e8c4ff"/>
+  </g>
+  <g transform="translate(384)">
+    <path d="M4 81h40v8H4zM24 69h35v8H24zM48 56h31v8H48zM73 43h27v8H73z" fill="#a675e5"/>
+    <path d="M42 74h44v10H42zM67 63h43v10H67zM95 52h27v10H95z" fill="#ffe07c"/>
+    <path d="M51 75h56v8H51zM76 64h46v8H76z" fill="#402349"/>
+    <path d="M112 28h14v14h-14zM134 40h12v12h-12zM153 55h10v10h-10zM133 74h9v9h-9zM16 42h8v8h-8z" fill="#fff4b6"/>
+    <path d="M115 31h7v7h-7z" fill="#ff8b8b"/>
+  </g>
+</svg>
