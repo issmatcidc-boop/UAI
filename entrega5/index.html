@@ -244,6 +244,63 @@
             line-height: 1.55;
         }
 
+        .build-steps {
+            list-style: none;
+            display: grid;
+            gap: 22px;
+        }
+        .build-step {
+            min-width: 0;
+            padding: clamp(12px, 2vw, 18px);
+            border: 1px solid rgba(181, 104, 255, .45);
+            border-radius: 8px;
+            background: #10071b;
+        }
+        .build-step h3 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font: .72rem/1.65 'Press Start 2P', monospace;
+            color: var(--neon-gold);
+        }
+        .build-number {
+            display: grid;
+            place-items: center;
+            flex: 0 0 2.15rem;
+            height: 2.15rem;
+            color: var(--neon-mint);
+            border: 1px solid currentColor;
+            background: var(--dark-bg);
+        }
+        .build-step > p {
+            margin-top: 10px;
+            color: #e2e8f0;
+            font-size: .9rem;
+            line-height: 1.65;
+        }
+        .build-photos {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 14px;
+        }
+        .build-photos .media { margin: 0; }
+        .build-photos img {
+            position: relative;
+            z-index: 11;
+            aspect-ratio: 1;
+            object-fit: cover;
+        }
+        .build-photo-wide {
+            grid-column: 1 / -1;
+        }
+        .build-photo-wide img {
+            aspect-ratio: 2;
+            object-position: center 60%;
+        }
+        .build-photo-soldering img { object-position: right center; }
+        .build-photo-board img { object-position: center 42%; }
+
         @media (max-width: 1350px) {
             .back-btn { position: relative; top: auto; left: auto; align-self: flex-start; }
         }
@@ -259,6 +316,10 @@
             th, td { padding: 8px; }
             th { font-size: .56rem; line-height: 1.55; letter-spacing: 0; }
             .text-box { padding: 12px; }
+        }
+        @media (max-width: 480px) {
+            .build-photos { grid-template-columns: 1fr; }
+            .build-photo-wide img { aspect-ratio: 4 / 3; }
         }
         @media (prefers-reduced-motion: reduce) {
             .arcade-header h1 { animation: none; }
@@ -293,8 +354,51 @@
             </table>
         </section>
 
+        <section class="stage-card" aria-labelledby="construction">
+            <h2 id="construction">2. CONSTRUCCIÓN DEL MINIARCADE</h2>
+            <ol class="build-steps" role="list">
+                <li class="build-step">
+                    <h3><span class="build-number" aria-hidden="true">01</span> PIEZAS Y MATERIALES</h3>
+                    <p>Reunimos el Arduino Uno R3, la placa perforada, los cuatro botones arcade, el pulsador rojo, el potenciómetro deslizante y los cables.</p>
+                    <div class="build-photos">
+                        <figure class="media build-photo-wide">
+                            <img src="./material/construccion/piezas-y-materiales.jpg" width="1250" height="1667" loading="lazy" decoding="async" alt="Arduino, botones arcade, deslizador, placa perforada y cables sobre la mesa de trabajo.">
+                        </figure>
+                    </div>
+                </li>
+                <li class="build-step">
+                    <h3><span class="build-number" aria-hidden="true">02</span> SOLDADURA Y CABLEADO</h3>
+                    <p>Soldamos los pines y cables a la placa perforada. Con ella conectamos los botones y el deslizador al Arduino.</p>
+                    <div class="build-photos">
+                        <figure class="media build-photo-soldering">
+                            <img src="./material/construccion/soldadura.jpg" width="1250" height="938" loading="lazy" decoding="async" alt="Una mano suelda conexiones en la placa perforada con un cautín.">
+                            <figcaption>Soldadura de las conexiones.</figcaption>
+                        </figure>
+                        <figure class="media build-photo-board">
+                            <img src="./material/construccion/placa-soldada.jpg" width="1250" height="1667" loading="lazy" decoding="async" alt="Cara soldada de la placa perforada con el Arduino y el cableado debajo.">
+                            <figcaption>Placa soldada y conectada al Arduino.</figcaption>
+                        </figure>
+                    </div>
+                </li>
+                <li class="build-step">
+                    <h3><span class="build-number" aria-hidden="true">03</span> IMPRESIÓN 3D Y MONTAJE</h3>
+                    <p>Imprimimos la carcasa y los detalles decorativos por separado. Montamos los botones en cruz y dejamos el deslizador en horizontal, al lado del pulsador rojo.</p>
+                    <div class="build-photos">
+                        <figure class="media">
+                            <img src="./material/construccion/impresion-3d.jpg" width="1250" height="1667" loading="lazy" decoding="async" alt="Pantalla de la impresora 3D con los archivos de las piezas de la carcasa.">
+                            <figcaption>Archivos en la impresora 3D.</figcaption>
+                        </figure>
+                        <figure class="media">
+                            <img src="./material/construccion/modelo-impreso.jpg" width="1019" height="1029" loading="lazy" decoding="async" alt="Miniarcade armado con carcasa negra, figuras blancas, botones morados y deslizador horizontal.">
+                            <figcaption>Modelo impreso con los controles montados.</figcaption>
+                        </figure>
+                    </div>
+                </li>
+            </ol>
+        </section>
+
         <section class="stage-card connection-module" aria-labelledby="connections">
-            <h2 id="connections">2. CONEXIONES DEL ARDUINO</h2>
+            <h2 id="connections">3. CONEXIONES DEL ARDUINO</h2>
             <p>El Arduino Uno R3 lee cinco botones digitales y el potenciómetro B103 de 10 kΩ. El cable USB alimenta la placa y transmite las lecturas al juego.</p>
 
             <h3 class="wire-title" id="digital-inputs">BOTONES</h3>
@@ -330,7 +434,7 @@
         </section>
 
         <section class="stage-card" aria-labelledby="game">
-            <h2 id="game">3. INVESTIGA LA MANSIÓN</h2>
+            <h2 id="game">4. INVESTIGA LA MANSIÓN</h2>
             <p>El fantasma guía enseña a usar el mando en el entrenamiento. Después, en la Mansión Brumosa, sintoniza la radio, revela huellas y reúne pistas para resolver el caso.</p>
 
             <figure class="media game-preview">
