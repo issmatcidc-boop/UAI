@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" shape-rendering="crispEdges">
+  <title>Fantasma del retrato · hoja de 16 fotogramas</title>
+  <desc>Pixel art transparente. Cuatro filas: espera, patrulla, persecución y aturdido; cuatro frames por fila.</desc>
+  <defs>
+    <g id="body">
+      <path d="M20 5h23v3h5v4h5v8h4v13h4v13h-5v7h-5v7h-7v5h-6v-7h-4v5h-6v-5h-5v5h-6v-8h-5v-8h-4v-9h-4V25h4v-7h4v-5h4v-5h4z" fill="#100d20"/>
+      <path d="M20 5h23v3h5v4h5v8h4v13h4v13h-5v7h-5v7h-7v5h-6v-7h-4v5h-6v-5h-5v5h-6v-8h-5v-8h-4v-9h-4V25h4v-7h4v-5h4v-5h4z" fill="#e8e0cb"/>
+      <path d="M19 10h5v-3h18v4h5v5h4v10h4v9h-5v8h-4v7h-5v6h-5v-7h-5v5h-5v-5h-5v4h-4v-8h-4v-8h-4V27h4v-7h4v-5h4z" fill="#c7c3bc"/>
+      <path d="M17 20h4v-5h5v-4h13v4h6v5h4v8H17z" fill="#706a79"/>
+      <path d="M20 19h7v-3h5v4h-4v3h-8zM37 17h6v3h4v4h-8v-3h-3z" fill="#958a91"/>
+      <path d="M19 22h10v3h-5v3h-5zM39 21h10v4h-5v3h-5z" fill="#17142a"/>
+      <path d="M21 22h5v3h-5zM41 21h5v3h-5z" fill="#ffd56d"/>
+      <path d="M30 25h8v3h-3v2h-4v-2h-3v-2h2z" fill="#33253c"/>
+      <path d="M33 27h3v2h-3z" fill="#ff845c"/>
+      <path d="M12 34h6v4h4v7h-5v-3h-5zM48 33h6v7h-4v5h-5v-7h3z" fill="#bdb8b4"/>
+      <path d="M9 38h5v5h5v4h-8v-3H9zM49 39h6v5h-4v4h-6v-5h4z" fill="#7d7882"/>
+      <path d="M22 35h3v4h-3zM41 34h3v5h-3zM29 38h3v3h-3z" fill="#9d9697"/>
+      <path d="M14 49h5v6h5v3h-6v-3h-4zM44 48h5v6h-4v4h-7v-3h5z" fill="#aaa4a6"/>
+      <path d="M11 46h4v3h-4zM50 45h5v4h-5zM23 53h4v4h-4zM34 55h4v4h-4z" fill="#50c8c8"/>
+      <path d="M24 11h2v5h-2zM45 14h2v4h-2zM12 29h3v2h-3z" fill="#f7ecd2"/>
+      <path d="M27 32h3v2h-3zM36 32h3v2h-3z" fill="#5b5067"/>
+      <path d="M28 9h3v2h-3zM18 42h2v3h-2zM43 45h2v3h-2z" fill="#eee9de"/>
+    </g>
+    <g id="portrait-mark">
+      <path d="M29 43h7v2h-7zM28 45h9v3h-9z" fill="#d39a45"/>
+      <path d="M30 44h5v2h-5z" fill="#273c47"/>
+      <path d="M31 44h2v2h-2z" fill="#65d8ce"/>
+    </g>
+    <g id="stun-stars" fill="#ffe16b">
+      <path d="M8 12h3v3h3v3h-3v4H8v-4H5v-3h3z"/>
+      <path d="M51 20h3v3h3v3h-3v4h-3v-4h-3v-3h3z"/>
+      <path d="M14 43h2v2h2v2h-2v3h-2v-3h-2v-2h2z"/>
+    </g>
+  </defs>
+  <!-- Espera / flotación -->
+  <g transform="translate(0 0)"><use href="#body"/><use href="#portrait-mark"/><path d="M17 60h30v2H17z" fill="#6bcac4" opacity=".65"/></g>
+  <g transform="translate(64 0)"><use href="#body" transform="translate(0 -1)"/><use href="#portrait-mark" transform="translate(0 -1)"/><path d="M17 59h30v2H17z" fill="#6bcac4" opacity=".55"/></g>
+  <g transform="translate(128 0)"><use href="#body"/><use href="#portrait-mark"/><path d="M17 60h30v2H17z" fill="#6bcac4" opacity=".65"/></g>
+  <g transform="translate(192 0)"><use href="#body" transform="translate(0 1)"/><use href="#portrait-mark" transform="translate(0 1)"/><path d="M17 61h30v2H17z" fill="#6bcac4" opacity=".55"/></g>
+  <!-- Patrulla -->
+  <g transform="translate(0 64)"><use href="#body"/><use href="#portrait-mark"/><path d="M7 34h5v5H7zM54 31h5v5h-5z" fill="#75d6d2"/></g>
+  <g transform="translate(64 64)"><use href="#body" transform="translate(1 0)"/><use href="#portrait-mark" transform="translate(1 0)"/><path d="M8 32h5v5H8zM53 34h5v5h-5z" fill="#75d6d2"/></g>
+  <g transform="translate(128 64)"><use href="#body"/><use href="#portrait-mark"/><path d="M7 31h5v5H7zM54 35h5v5h-5z" fill="#75d6d2"/></g>
+  <g transform="translate(192 64)"><use href="#body" transform="translate(-1 0)"/><use href="#portrait-mark" transform="translate(-1 0)"/><path d="M8 34h5v5H8zM53 32h5v5h-5z" fill="#75d6d2"/></g>
+  <!-- Persecución: manto inclinado, ojos encendidos y estela -->
+  <g transform="translate(0 128)"><path d="M2 27h5v3H2zM5 34h4v2H5z" fill="#65c9d1"/><use href="#body" transform="rotate(-3 32 32)"/><use href="#portrait-mark"/></g>
+  <g transform="translate(64 128)"><path d="M1 25h7v3H1zM4 34h5v2H4z" fill="#65c9d1"/><use href="#body" transform="translate(1 0) rotate(-2 32 32)"/><use href="#portrait-mark" transform="translate(1 0)"/><path d="M20 21h7v3h-7zM41 20h7v3h-7z" fill="#fff0ae"/></g>
+  <g transform="translate(128 128)"><path d="M0 30h7v3H0zM4 39h5v2H4z" fill="#65c9d1"/><use href="#body" transform="rotate(2 32 32)"/><use href="#portrait-mark"/><path d="M20 21h7v3h-7zM41 20h7v3h-7z" fill="#fff0ae"/></g>
+  <g transform="translate(192 128)"><path d="M1 26h7v3H1zM4 36h5v2H4z" fill="#65c9d1"/><use href="#body" transform="translate(-1 0) rotate(3 32 32)"/><use href="#portrait-mark" transform="translate(-1 0)"/><path d="M20 21h7v3h-7zM41 20h7v3h-7z" fill="#fff0ae"/></g>
+  <!-- Aturdido -->
+  <g transform="translate(0 192)"><use href="#body"/><use href="#portrait-mark"/><use href="#stun-stars"/><path d="M24 23h5v3h-5zM39 23h5v3h-5z" fill="#65d8ce"/></g>
+  <g transform="translate(64 192)"><use href="#body" transform="translate(1 -1)"/><use href="#portrait-mark" transform="translate(1 -1)"/><use href="#stun-stars" transform="translate(1 1)"/><path d="M24 23h5v3h-5zM39 23h5v3h-5z" fill="#65d8ce"/></g>
+  <g transform="translate(128 192)"><use href="#body"/><use href="#portrait-mark"/><use href="#stun-stars" transform="translate(-1 0)"/><path d="M24 23h5v3h-5zM39 23h5v3h-5z" fill="#65d8ce"/></g>
+  <g transform="translate(192 192)"><use href="#body" transform="translate(-1 1)"/><use href="#portrait-mark" transform="translate(-1 1)"/><use href="#stun-stars" transform="translate(0 -1)"/><path d="M24 23h5v3h-5zM39 23h5v3h-5z" fill="#65d8ce"/></g>
+</svg>
