@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="154" viewBox="0 0 500 154" role="img" aria-label="Nota al margen. A las 22:40 se encendió el retrato. Elvira seguía al teléfono en la entrada.">
+  <path d="M15 16H21V137H15Z M26 43H204V46H26Z" fill="#92505c" opacity=".75"/>
+  <text x="27" y="35" fill="#793b52" font-family="Consolas,monospace" font-size="24" font-weight="bold">22:40 · NOTA AL MARGEN</text>
+  <text x="27" y="74" fill="#512b3b" font-family="Consolas,monospace" font-size="26" font-weight="bold">
+    <tspan x="27">Se encendió el retrato.</tspan>
+    <tspan x="27" dy="30">Elvira seguía al teléfono</tspan>
+    <tspan x="27" dy="30">en la entrada.</tspan>
+  </text>
+</svg>
