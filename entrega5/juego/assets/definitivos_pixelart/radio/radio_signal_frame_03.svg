@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="1024" viewBox="0 0 1536 1024" shape-rendering="crispEdges">
+<path d="M290 742 h24 v-1 h24 v7 h24 v18 h24 v-27 h24 v-4 h24 v-17 h24 v31 h24 h24 v5 h24 v-23 h24 v4 h24 v-17 h24 v39 h24 v-9 h24 v17 h24 v-42 h24 v13 h24 v-28 h24 v56 h24 v-17 h24 v15 h24 v-45 h24 v21 h24 v-13 h24 v45 h24 v-25 h24 h24 v-33 h24 v29 h24 v-11 h24 v43 h24 v-32 h24 v10 h24 v-40 h24 v33 h24 v-20 h24 v49 h24 v-35" fill="none" stroke="#080e18" stroke-width="12" stroke-linecap="square" stroke-linejoin="miter"/>
+<path d="M290 742 h24 v-1 h24 v7 h24 v18 h24 v-27 h24 v-4 h24 v-17 h24 v31 h24 h24 v5 h24 v-23 h24 v4 h24 v-17 h24 v39 h24 v-9 h24 v17 h24 v-42 h24 v13 h24 v-28 h24 v56 h24 v-17 h24 v15 h24 v-45 h24 v21 h24 v-13 h24 v45 h24 v-25 h24 h24 v-33 h24 v29 h24 v-11 h24 v43 h24 v-32 h24 v10 h24 v-40 h24 v33 h24 v-20 h24 v49 h24 v-35" fill="none" stroke="#ffae49" stroke-width="7" stroke-linecap="square" stroke-linejoin="miter"/>
+<path d="M290 742 h24 v-1 h24 v7 h24 v18 h24 v-27 h24 v-4 h24 v-17 h24 v31 h24 h24 v5 h24 v-23 h24 v4 h24 v-17 h24 v39 h24 v-9 h24 v17 h24 v-42 h24 v13 h24 v-28 h24 v56 h24 v-17 h24 v15 h24 v-45 h24 v21 h24 v-13 h24 v45 h24 v-25 h24 h24 v-33 h24 v29 h24 v-11 h24 v43 h24 v-32 h24 v10 h24 v-40 h24 v33 h24 v-20 h24 v49 h24 v-35" fill="none" stroke="#e5fff5" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" opacity=".72"/>
+<rect x="383" y="844" width="53" height="33" fill="#ed8e37"/>
+<rect x="388" y="848" width="11" height="4" fill="#fff1bd" opacity=".78"/>
+<rect x="463" y="844" width="53" height="33" fill="#ed8e37"/>
+<rect x="468" y="848" width="11" height="4" fill="#fff1bd" opacity=".78"/>
+<rect x="543" y="844" width="53" height="33" fill="#ed8e37"/>
+<rect x="548" y="848" width="11" height="4" fill="#fff1bd" opacity=".78"/>
+<rect x="554" y="635" width="7" height="132" fill="#ffae49" opacity=".22"/>
+</svg>
