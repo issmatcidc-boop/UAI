@@ -1,34 +1,46 @@
 <!doctype html>
 <html lang="es">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Stage 7 · Interacción con MediaPipe | Taller de Interfaces</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../estilos-etapas.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stage 7 · Laboratorio de gestos | Taller de Interfaces</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../estilos-etapas.css">
+  <link rel="stylesheet" href="./tema.css">
 </head>
 <body>
-    <nav class="navegacion" aria-label="Portafolio">
-        <a class="boton secundario" href="../">← PORTAFOLIO</a>
-    </nav>
-    <main>
-        <header class="presentacion">
-            <p class="etiqueta">STAGE 7 · MEDIAPIPE</p>
-            <h1>Interacción con MediaPipe</h1>
-            <p>Tres experiencias que convierten tus gestos frente a la cámara en efectos visuales y sonido.</p>
-            <div class="acciones">
-                <a class="boton" href="https://issmatcidc-boop.github.io/interaccion-media-pipe/">ABRIR DEMO</a>
-                <a class="boton secundario" href="https://github.com/issmatcidc-boop/interaccion-media-pipe">VER CÓDIGO</a>
-            </div>
-        </header>
-        <section class="panel" aria-labelledby="uso">
-            <h2 id="uso">Cómo probarlo</h2>
-            <ol>
-                <li>Abre la demo, elige una experiencia y permite el acceso a la cámara.</li>
-                <li>Cierra y abre ambos ojos para invocar al fantasma. Levanta dedos para tocar el violín.</li>
-                <li>Encuadra tu cuerpo completo y levanta ambos brazos para activar la explosión.</li>
-            </ol>
-        </section>
-    </main>
+  <nav class="navegacion" aria-label="Volver"><a class="boton secundario" href="../">← PORTAFOLIO</a></nav>
+  <main>
+    <header class="proyecto">
+      <div>
+        <p class="etiqueta">STAGE 7 · MEDIAPIPE</p>
+        <h1>Laboratorio de gestos</h1>
+        <p>La cámara se convierte en un control para invocar un fantasma, tocar notas y activar una explosión virtual.</p>
+        <div class="acciones">
+          <a class="boton" href="https://issmatcidc-boop.github.io/interaccion-media-pipe/">ABRIR DEMO</a>
+          <a class="boton secundario" href="./ficha-tecnica.html">FICHA TÉCNICA</a>
+        </div>
+      </div>
+      <figure>
+        <img src="https://issmatcidc-boop.github.io/interaccion-media-pipe/imagenes/fantasma.png" alt="Fantasma translúcido que aparece detrás de la persona">
+        <figcaption>Recurso visual de Parpadeo fantasma.</figcaption>
+      </figure>
+    </header>
+    <section class="panel" aria-labelledby="uso">
+      <h2 id="uso">Cómo probarlo</h2>
+      <ol class="modos">
+        <li><strong>Rostro.</strong> Cierra ambos ojos un instante y ábrelos para que aparezca el fantasma.</li>
+        <li><strong>Mano.</strong> Levanta de uno a cinco dedos para tocar Sol, La, Si, Do y Re.</li>
+        <li><strong>Cuerpo completo.</strong> Empieza con los brazos abajo. Levanta ambos por encima de la cabeza para activar la explosión.</li>
+      </ol>
+    </section>
+    <section class="panel" aria-labelledby="recursos">
+      <h2 id="recursos">Material del proyecto</h2>
+      <p>Consulta la guía para preparar la demo y entender qué ocurre al usar la cámara.</p>
+      <div class="acciones">
+        <a class="boton secundario" href="https://github.com/issmatcidc-boop/interaccion-media-pipe">VER CÓDIGO</a>
+      </div>
+    </section>
+  </main>
 </body>
 </html>
