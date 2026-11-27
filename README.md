@@ -14,3 +14,4 @@ Repositorio dedicado a los proyectos y entregas del curso Taller de Interfaces.
 
 * **Stage 7:** [Interacción con MediaPipe](./entrega7/), tres experiencias de cámara que responden a gestos de rostro, mano y cuerpo.
 * **Stage 8:** [3D Interaction](./entrega8/), realidad aumentada con un marcador y un modelo 3D animado.
+* **Stage 10:** [Fosa de Atacama](./entrega10/), expedición científica interactiva inspirada en JCATE 2026. Incluye la guía de uso, la ficha técnica y la demo estable 7.1.

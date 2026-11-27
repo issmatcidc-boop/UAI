@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Una expedición científica interactiva a la Fosa de Atacama.">
+<title>Fosa de Atacama · Misión JCATE</title>
+<link rel="stylesheet" href="./style.css">
+<link rel="stylesheet" href="./interfaz.css">
+<script type="importmap">{"imports":{"three":"./vendor/three/context.mjs"}}</script>
+<script defer src="./three.js"></script>
+<script defer src="./entorno/luz.js"></script>
+<script defer src="./entorno/agua.js"></script>
+<script defer src="./game.js"></script>
+<script defer src="./cabina.js"></script>
+<script defer src="./hands.js"></script>
+<script defer src="./direccion.js"></script>
+<script defer src="./timeline.js"></script>
+<script defer src="./vehicle.js"></script>
+<script defer src="./performance.js"></script>
+<script defer src="./interfaz.js"></script>
+</head>
+<body data-screen="cover">
+<main class="mission-screen">
+  <section class="play" id="play" aria-label="Fosa de Atacama">
+    <div id="viewport" tabindex="0" aria-label="Visor. Apunta con el mouse o las flechas. Usa Espacio para actuar."></div>
+    <header class="mission-header">
+      <div class="mission-brand"><span class="signal"></span>JCATE <span>2026</span></div>
+      <nav class="mission-tools" aria-label="Controles de la misión">
+        <button type="button" id="handIndicator" hidden></button>
+        <button type="button" id="journal" aria-controls="log">Bitácora <strong id="count">0</strong></button>
+        <button type="button" id="fullscreen" aria-pressed="false">Pantalla completa</button>
+        <button type="button" id="missionOptions">Opciones</button>
+      </nav>
+    </header>
+    <div class="viewtop" aria-hidden="true"><span><i></i> <b id="feed">CABINA · VISTA INTERIOR</b></span></div>
+    <button id="activate" class="consoleMonitor" type="button" hidden disabled>
+      <span id="monitorTarget">Monitor científico</span><strong id="monitorState">En espera</strong>
+    </button>
+    <div id="workFeed" aria-hidden="true" hidden><span></span><span></span><span></span><span></span></div>
+    <div id="cameraTransition" aria-hidden="true"></div>
+    <div id="markers">
+      <div id="objectiveCue" hidden>
+        <div class="gestureCard"><canvas width="100" height="100" aria-hidden="true" hidden></canvas><div><small hidden></small><strong></strong></div></div>
+        <svg aria-hidden="true" width="100%" height="100%"><path></path></svg>
+      </div>
+    </div>
+    <div id="reticle" hidden></div>
+    <div id="chapter"></div>
+    <p id="scienceFact" hidden></p>
+    <div id="narration"></div>
+    <div id="timeJump" hidden>90 MINUTOS DESPUÉS</div>
+    <div id="notice" role="status"></div>
+    <aside class="mission-objective" aria-label="Objetivo actual">
+      <p id="taskTitle">Preparar descenso</p><p id="taskHint"></p>
+    </aside>
+    <button type="button" id="trapCutaway" hidden aria-pressed="false">Vista en corte</button>
+    <div class="viewbottom" aria-hidden="true"><span>FENDOUZHE</span><span id="mode"></span></div>
+
+    <section class="overlay cover" id="overlay" aria-labelledby="overlayTitle">
+      <div class="cover-content">
+        <p class="eyebrow" id="overlayLabel">Expedición científica · Chile–China</p>
+        <h1 id="overlayTitle">Fosa de Atacama</h1>
+        <p class="cover-subtitle" id="coverSubtitle">A bordo del Fendouzhe</p>
+        <p id="overlayCopy">Desciende al fondo de la fosa. Usa la pinza para recoger dos muestras y observa qué ocurre con el jurel que los científicos dejan en una trampa.</p>
+        <div class="cover-actions">
+          <button type="button" class="primary" id="prepareMission" disabled>Iniciar expedición</button>
+          <button type="button" class="secondary" id="exhibition" disabled>Ver exposición automática</button>
+          <button type="button" class="secondary" id="reviewSamples" aria-controls="log" hidden>Ver mis muestras</button>
+        </div>
+        <p id="vehicleStatus" role="status">Preparando la misión…</p>
+        <nav class="cover-links" aria-label="Información y configuración">
+          <button type="button" id="helpButton">Cómo jugar</button>
+          <button type="button" id="coverAudio">Audio y subtítulos</button>
+          <button type="button" id="coverHands" disabled>Control por mano</button>
+          <button type="button" id="creditsButton">Créditos científicos</button>
+        </nav>
+      </div>
+    </section>
+
+    <section class="preparation" id="preparation" aria-labelledby="preparationTitle" hidden>
+      <div class="preparation-card">
+        <p class="eyebrow">Antes del descenso</p>
+        <h2 id="preparationTitle" tabindex="-1">Elige cómo pilotar</h2>
+        <div class="input-choices" role="group" aria-label="Control">
+          <button type="button" id="useMouse" aria-pressed="true">Mouse y teclado</button>
+          <button type="button" id="useHand" aria-pressed="false">Seguimiento de mano</button>
+        </div>
+        <p id="inputGuide">Apunta con el mouse. Mantén clic para cerrar la pinza y suelta para abrir.</p>
+        <div id="prepCalibration"></div>
+        <div class="preparation-actions">
+          <button type="button" id="backToCover">Volver</button>
+          <button type="button" id="start" class="primary" disabled>Comenzar descenso</button>
+        </div>
+      </div>
+    </section>
+  </section>
+</main>
+
+<dialog id="helpDialog" aria-labelledby="helpTitle">
+  <header><h2 id="helpTitle">Cómo jugar</h2><form method="dialog"><button aria-label="Cerrar ayuda">Cerrar</button></form></header>
+  <p>Activa la cámara de trabajo desde el monitor de la cabina. Recoge la roca y suéltala sobre la cesta.</p>
+  <p>Después de observar la trampa, usa el modo precisión para capturar el poliqueto. Mantén cerrada la pinza hasta que se registre la muestra.</p>
+  <p>Con la mano derecha, mueve la palma para apuntar y junta el índice y el pulgar para cerrar la pinza. Con mouse, mantén pulsado el clic.</p>
+</dialog>
+<dialog id="optionsDialog" aria-labelledby="optionsTitle">
+  <header><h2 id="optionsTitle">Opciones</h2><form method="dialog"><button aria-label="Cerrar opciones">Cerrar</button></form></header>
+  <div class="settings">
+    <label class="setting">Volumen de narración <input id="voiceVolume" type="range" min="0" max="100" value="100"></label>
+    <label class="setting">Ambiente y mecanismos <input id="environmentVolume" type="range" min="0" max="100" value="75"></label>
+    <label class="setting">Subtítulos <input id="subtitles" type="checkbox" checked></label>
+    <button type="button" id="configureHand">Configurar control por mano</button>
+    <button type="button" id="presentationMode" aria-pressed="false">Abrir modo desarrollo</button>
+    <button type="button" id="leaveMission" hidden>Volver a portada</button>
+  </div>
+</dialog>
+<dialog id="handDialog" aria-labelledby="handTitle">
+  <header><h2 id="handTitle">Control por mano</h2><form method="dialog"><button aria-label="Cerrar configuración de mano">Cerrar</button></form></header>
+  <div id="handCalibration"></div>
+</dialog>
+<section class="handControl" id="handControls" aria-label="Calibración" hidden>
+  <div class="handHeading"><button id="cameraToggle" type="button">Activar cámara</button></div>
+  <div id="handPreview" hidden><video id="handVideo" autoplay muted playsinline></video><canvas id="handMarks"></canvas><div class="handZone" aria-hidden="true"></div></div>
+  <p class="handFraming">Coloca la cara encima de la línea y la mano debajo.</p>
+  <div id="handRoles" hidden><span id="swipeDetected">Izq. · Detectada</span><span id="aimDetected">Der. · Control</span></div>
+  <p id="handStatus" role="status">Control con mouse.</p>
+</section>
+<dialog id="creditsDialog" aria-labelledby="creditsTitle">
+  <header><h2 id="creditsTitle">Créditos científicos</h2><form method="dialog"><button aria-label="Cerrar créditos">Cerrar</button></form></header>
+  <p>Experiencia educativa inspirada en la expedición conjunta JCATE 2026 a la Fosa de Atacama. Las maniobras y las escenas son recreaciones.</p>
+  <ul id="scientificSources"></ul>
+  <p>Narración sintética generada mediante ElevenLabs con la voz Luisa.</p>
+</dialog>
+
+<aside id="developerTools" class="developer-tools" aria-label="Modo desarrollo" hidden>
+  <div class="developer-heading"><h2>Modo desarrollo</h2><button type="button" id="closeDeveloper">Cerrar</button></div>
+  <label for="developerScene">Escena de prueba</label>
+  <div class="developer-row">
+    <select id="developerScene">
+      <option value="intro">Descenso</option><option value="rockPrompt">Cabina</option>
+      <option value="rockWork">Manipulador · roca</option><option value="trapBefore">Trampa · antes</option>
+      <option value="trapAfter">Trampa · 90 minutos después</option><option value="wormMacro">Poliqueto · macro</option>
+      <option value="wormWork">Manipulador · precisión</option><option value="ending">Cierre</option>
+    </select>
+    <button id="openDeveloperScene" type="button" disabled>Abrir</button>
+  </div>
+  <output id="developerReadout"></output>
+  <div id="practiceTimer" hidden>Tiempo libre <strong id="elapsedTime">00:00</strong></div>
+  <p id="controlHelp"></p>
+  <ol id="steps"><li><span></span><div>Recoger la muestra geológica</div></li><li><span></span><div>Observar el experimento</div></li><li><span></span><div>Asegurar el poliqueto</div></li></ol>
+  <details id="performancePanel" class="performancePanel">
+    <summary>Mediciones</summary>
+    <p>Mide la vista actual o mantén el cursor quieto para revisar el pulso de la pinza.</p>
+    <button id="measureView" type="button">Medir vista</button>
+    <button id="measureArm" type="button">Medir pulso del brazo</button>
+    <output id="performanceReadout"></output>
+  </details>
+</aside>
+<dialog id="log" aria-labelledby="logTitle">
+  <header><div><h2 id="logTitle">Bitácora científica</h2><p id="logSummary"></p></div><form method="dialog"><button aria-label="Cerrar bitácora">Cerrar</button></form></header>
+  <div id="entries"></div>
+</dialog>
+</body>
+</html>
