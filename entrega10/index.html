@@ -27,6 +27,11 @@
         <figcaption>El Fendouzhe durante el descenso · Demo 7.1</figcaption>
       </figure>
     </header>
+    <section class="panel" aria-labelledby="proyecto">
+      <h2 id="proyecto">De la expedición a la cabina</h2>
+      <p>La experiencia se inspira en JCATE 2026, una expedición científica chileno-china a la Fosa de Atacama. Recreamos el trabajo desde el interior del sumergible. Los ventanales muestran el fondo en tiempo real, el monitor indica cuándo cambiar a la cámara de trabajo y la bitácora reúne las observaciones de la misión.</p>
+      <p>La cámara de manipulación y la pinza se diseñaron juntas para trasladar un gesto sencillo de la mano al movimiento de un brazo robótico. En la oscuridad, los focos permiten apreciar la distancia al terreno y orientarse al acercarse a una muestra.</p>
+    </section>
     <section class="panel" aria-labelledby="uso">
       <h2 id="uso">Cómo utilizarlo</h2>
       <ol class="modos">
@@ -34,6 +39,24 @@
         <li><strong>Controla la pinza.</strong> Con mouse, apunta y mantén el clic para cerrar. Con cámara, permite el acceso, muestra la mano derecha y junta el pulgar con el índice. Suelta el clic o separa los dedos para abrir.</li>
         <li><strong>Sigue el monitor y las indicaciones.</strong> Activa la cámara de trabajo cuando la cabina te lo pida y consulta la bitácora para revisar tus observaciones.</li>
       </ol>
+    </section>
+    <section class="panel" aria-labelledby="produccion">
+      <h2 id="produccion">Cómo construimos el mundo 3D</h2>
+      <p>Partimos de fotografías del Fendouzhe y referencias científicas del fondo y sus organismos. Con vistas desde distintos ángulos pudimos revisar las proporciones de los modelos antes de integrarlos al juego.</p>
+      <div class="proceso">
+        <div>
+          <h3>Meshy Pro</h3>
+          <p>Usamos referencias multivista para generar modelos de organismos y objetos de muestreo. También usamos Meshy para remallar el exterior del sumergible y reducir la complejidad de la malla que carga la demo.</p>
+        </div>
+        <div>
+          <h3>Blender</h3>
+          <p>Refinamos las mallas, reconstruimos la rejilla abierta de la trampa y preparamos los esqueletos de animación de los organismos. Modelamos la cabina y articulamos el manipulador con pivotes en sus uniones.</p>
+        </div>
+        <div>
+          <h3>Three.js y MediaPipe</h3>
+          <p>Integramos los modelos GLB, las cámaras y los focos en el navegador. MediaPipe traduce el movimiento de la mano en acciones de la pinza. La narración y los subtítulos guían la exposición automática.</p>
+        </div>
+      </div>
     </section>
   </main>
 </body>
